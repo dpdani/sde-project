@@ -1,0 +1,9 @@
+[db]
+url = "mongodb://kappafnlogs@mongo:27017"
+password = ""
+database = "kappa"
+collection = "logs"
+
+[server]
+host = "0.0.0.0"
+port = 8040

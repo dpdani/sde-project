@@ -1,0 +1,14 @@
+[server]
+host = "0.0.0.0"
+port = 8010
+
+[kappa]
+data = "kappa-data:8020"
+fn-code = "kappa-fn-code:8030"
+logs = "kappa-logs:8050"
+runner = "kappa-runner:8060"
+
+[github]
+base_url = "https://github.com"
+api_version = ""
+text = "You may also be intereseted in these open source projects"
