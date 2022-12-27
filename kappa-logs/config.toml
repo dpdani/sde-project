@@ -4,4 +4,4 @@ port = 8050
 
 [kappa]
 data = "kappa-data:8010"
-fn-logs = "kappa-fn-logs:8030"
+fn_logs = "kappa-fn-logs:8030"

@@ -1,14 +1,20 @@
-import tomlkit
+import tomllib
 from pydantic import BaseModel, BaseSettings
 
 
 def read_conf_file(_: BaseSettings):
-    with open("config.toml", "rb") as f:
-        return tomlkit.load(f)
+    with open("kappa-fn-code/config.toml", "rb") as f:
+        return tomllib.load(f)
+
+
+class Server(BaseModel):
+    host: str
+    port: int
 
 
 class Config(BaseSettings):
     code_folder: str
+    server: Server
 
     class Config:
         env_prefix = 'KAPPA_FN_CODE_'

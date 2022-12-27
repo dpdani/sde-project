@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from typing import Self
 
@@ -6,10 +7,13 @@ from sqlmodel import Field, SQLModel, Session, create_engine, select
 from .config import config
 
 
-engine = create_engine(config.db.url, password=config.db.password)
+engine = None
 
 
 async def get_db():
+    global engine
+    if engine is None:
+        engine = create_engine(config.db.url)
     with Session(engine) as session:
         yield session
 
@@ -48,13 +52,13 @@ class Function(SQLModel, table=True):
 class KappaLog(SQLModel, table=True):
     log_id: int | None = Field(primary_key=True)
     time: datetime | None
-    content: dict
+    content: str
 
     @classmethod
     def add(cls, db: Session, user: int | None, fn: str | None, content: dict):
         return db.add(cls(
-            content=content | {
+            content=json.dumps(content | {
                 "user": user,
                 "fn": fn,
-            },
+            }),
         ))

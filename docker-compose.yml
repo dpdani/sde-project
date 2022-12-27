@@ -3,42 +3,56 @@ version: '3'
 services:
   kappa:
     build: .
-    command: "cd kappa && kappa"
+    command: "kappa"
     ports:
       - "8010:8010"
+
   kappa-data:
     build: .
-    command: "cd kappa-data && kappa-data"
+    command: "kappa-data"
     ports:
       - "8020:8020"
+
   kappa-fn-code:
     build: .
-    command: "cd kappa-fn-code && kappa-fn-code"
+    command: "kappa-fn-code"
+    volumes:
+      - fn-code:/app/code
     ports:
       - "8030:8030"
+
   kappa-fn-logs:
     build: .
-    command: "cd kappa-fn-logs && kappa-fn-logs"
+    command: "kappa-fn-logs"
     ports:
       - "8040:8040"
+
   kappa-logs:
     build: .
-    command: "cd kappa-logs && kappa-logs"
+    command: "kappa-logs"
     ports:
       - "8050:8050"
+
   kappa-runner:
     build: .
-    command: "cd kappa-runner && kappa-runner"
+    command: "kappa-runner"
     ports:
       - "8060:8060"
 
   postgres:
     image: postgres:14-alpine3.17
     volumes:
-      - kappa-data/pg-init.sql:/docker-entrypoint-initdb.d
+      - ./kappa-data/pg-init.sql:/docker-entrypoint-initdb.d/pg-init.sql
+    environment:
+      POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
+
   mongo:
     image: mongo:6.0.3
     ports:
       - "27017:27017"
+
+
+volumes:
+  fn-code:

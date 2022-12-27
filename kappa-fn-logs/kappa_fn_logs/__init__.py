@@ -6,7 +6,12 @@ from starlette import status
 from .config import config
 
 
-app = FastAPI()
+app = FastAPI(
+    title="kappa-fn-logs",
+    version="0.0.0",
+    author="dpdani",
+    generate_unique_id_function=lambda route: f"{route.name}",
+)
 
 mongo = MongoClient(config.db.url, password=config.db.password)[config.db.database][config.db.collection]
 

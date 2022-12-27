@@ -1,7 +1,7 @@
 secret = "be979fadb0daff061454f200501089ceaa9446b27af5da0e916d3e653340ddcc"
 
 [db]
-url = "postgresql://kappadata@postgres:5432/kappa"
+url = "postgresql://kappadata:password@postgres:5432/kappa"
 
 [server]
 host = "0.0.0.0"

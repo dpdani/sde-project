@@ -7,7 +7,12 @@ from starlette import status
 from .config import config
 
 
-app = FastAPI()
+app = FastAPI(
+    title="kappa-fn-code",
+    version="0.0.0",
+    author="dpdani",
+    generate_unique_id_function=lambda route: f"{route.name}",
+)
 
 
 @app.post("/code/{code_id}/")

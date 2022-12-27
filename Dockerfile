@@ -6,9 +6,8 @@ SHELL ["/bin/bash", "-c"]
 
 WORKDIR /app
 
-COPY kappa/pyproject.toml .
-RUN pip install -r pyproject.toml
-
+COPY pyproject.toml .
 COPY . .
+RUN pip install -e .
 
-CMD "cd kappa && kappa"
+CMD "kappa"
