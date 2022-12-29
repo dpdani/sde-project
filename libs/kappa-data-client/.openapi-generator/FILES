@@ -7,6 +7,8 @@ docs/apis/tags/DefaultApi.md
 docs/models/CreateFunction.md
 docs/models/Function.md
 docs/models/HTTPValidationError.md
+docs/models/KappaLog.md
+docs/models/LoginUser.md
 docs/models/Status.md
 docs/models/SuccessfulLogin.md
 docs/models/User.md
@@ -25,6 +27,10 @@ kappa_data_client/model/function.py
 kappa_data_client/model/function.pyi
 kappa_data_client/model/http_validation_error.py
 kappa_data_client/model/http_validation_error.pyi
+kappa_data_client/model/kappa_log.py
+kappa_data_client/model/kappa_log.pyi
+kappa_data_client/model/login_user.py
+kappa_data_client/model/login_user.pyi
 kappa_data_client/model/status.py
 kappa_data_client/model/status.pyi
 kappa_data_client/model/successful_login.py
@@ -45,6 +51,8 @@ test/test_models/__init__.py
 test/test_models/test_create_function.py
 test/test_models/test_function.py
 test/test_models/test_http_validation_error.py
+test/test_models/test_kappa_log.py
+test/test_models/test_login_user.py
 test/test_models/test_status.py
 test/test_models/test_successful_login.py
 test/test_models/test_user.py

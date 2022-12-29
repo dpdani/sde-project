@@ -172,6 +172,8 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**create_code**](docs/apis/tags/DefaultApi.md#create_code) | **post** /code/{code_id}/ | Create Code
 *DefaultApi* | [**delete_code**](docs/apis/tags/DefaultApi.md#delete_code) | **delete** /code/{code_id}/ | Delete Code
+*DefaultApi* | [**get_code**](docs/apis/tags/DefaultApi.md#get_code) | **get** /code/{code_id}/ | Get Code
+*DefaultApi* | [**get_code_ids**](docs/apis/tags/DefaultApi.md#get_code_ids) | **get** /code/ | Get Code Ids
 
 ## Documentation For Models
 

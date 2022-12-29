@@ -140,6 +140,28 @@ Please follow the [installation procedure](#installation--usage) and then run th
 import time
 import kappa_logs_client
 from pprint import pprint
+from kappa_logs_client.apis.tags import default_api
+from kappa_logs_client.model.http_validation_error import HTTPValidationError
+from kappa_logs_client.model.logs import Logs
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = kappa_logs_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with kappa_logs_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = default_api.DefaultApi(api_client)
+    fn_id = "fn_id_example" # str | 
+
+    try:
+        # Get Fn Logs
+        api_response = api_instance.get_fn_logs(fn_id)
+        pprint(api_response)
+    except kappa_logs_client.ApiException as e:
+        print("Exception when calling DefaultApi->get_fn_logs: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -148,15 +170,21 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**get_fn_logs**](docs/apis/tags/DefaultApi.md#get_fn_logs) | **get** /functions/{fn_id}/ | Get Fn Logs
 
 ## Documentation For Models
 
+ - [HTTPValidationError](docs/models/HTTPValidationError.md)
+ - [Log](docs/models/Log.md)
+ - [Logs](docs/models/Logs.md)
+ - [ValidationError](docs/models/ValidationError.md)
 
 ## Documentation For Authorization
 
  All endpoints do not require authorization.
 
 ## Author
+
 
 
 ## Notes for Large OpenAPI documents

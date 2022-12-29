@@ -17,36 +17,34 @@ mongo = MongoClient(config.db.url, password=config.db.password)[config.db.databa
 
 
 class CreateLog(BaseModel):
-    user: int
     fn: int
-    exec_id: int
-    content: str
+    exec_id: str
+    stdout: str
+    stderr: str
 
 
 @app.post("/logs/")
 def create_log(log: CreateLog):
     doc_id = mongo.find_one({
-        "user": log.user,
         "fn": log.fn,
     })["_id"]
     if doc_id is None:
         doc_id = mongo.insert_one({
-            "user": log.user,
             "fn": log.fn,
             "logs": [],
         })
     mongo.update_one({"_id": doc_id}, {
         "$push": {"logs": {
             "exec_id": log.exec_id,
-            "content": log.content,
+            "stdout": log.stdout,
+            "stderr": log.stderr,
         }}
     })
 
 
-@app.get("/logs/{user}/{fn}/")
-def get_logs(user: int, fn: int):
+@app.get("/logs/{fn}/")
+def get_logs(fn: int):
     doc = mongo.find_one({
-        "user": user,
         "fn": fn,
     })
     if doc is None:

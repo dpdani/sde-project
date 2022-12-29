@@ -141,10 +141,11 @@ import time
 import kappa_data_client
 from pprint import pprint
 from kappa_data_client.apis.tags import default_api
-from kappa_data_client.model.body_login import BodyLogin
 from kappa_data_client.model.create_function import CreateFunction
 from kappa_data_client.model.function import Function
 from kappa_data_client.model.http_validation_error import HTTPValidationError
+from kappa_data_client.model.kappa_log import KappaLog
+from kappa_data_client.model.login_user import LoginUser
 from kappa_data_client.model.status import Status
 from kappa_data_client.model.successful_login import SuccessfulLogin
 from kappa_data_client.model.user import User
@@ -191,14 +192,20 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**create_function**](docs/apis/tags/DefaultApi.md#create_function) | **post** /functions/ | Create Function
 *DefaultApi* | [**delete_function**](docs/apis/tags/DefaultApi.md#delete_function) | **delete** /functions/{fn_name}/ | Delete Function
 *DefaultApi* | [**get_function**](docs/apis/tags/DefaultApi.md#get_function) | **get** /functions/{fn_name}/ | Get Function
+*DefaultApi* | [**get_function_by_id**](docs/apis/tags/DefaultApi.md#get_function_by_id) | **get** /functions/id/{fn_id}/ | Get Function By Id
+*DefaultApi* | [**get_function_logs**](docs/apis/tags/DefaultApi.md#get_function_logs) | **get** /functions/{fn_name}/logs/ | Get Function Logs
 *DefaultApi* | [**get_me**](docs/apis/tags/DefaultApi.md#get_me) | **get** /users/me/ | Get Me
+*DefaultApi* | [**log_function_execution**](docs/apis/tags/DefaultApi.md#log_function_execution) | **post** /functions/{fn_id}/logs/execution/{exec_id} | Log Function Execution
 *DefaultApi* | [**login**](docs/apis/tags/DefaultApi.md#login) | **post** /login/ | Login
+*DefaultApi* | [**signup**](docs/apis/tags/DefaultApi.md#signup) | **post** /signup/ | Signup
 
 ## Documentation For Models
 
  - [CreateFunction](docs/models/CreateFunction.md)
  - [Function](docs/models/Function.md)
  - [HTTPValidationError](docs/models/HTTPValidationError.md)
+ - [KappaLog](docs/models/KappaLog.md)
+ - [LoginUser](docs/models/LoginUser.md)
  - [Status](docs/models/Status.md)
  - [SuccessfulLogin](docs/models/SuccessfulLogin.md)
  - [User](docs/models/User.md)

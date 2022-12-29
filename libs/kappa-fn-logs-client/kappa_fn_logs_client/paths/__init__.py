@@ -7,4 +7,4 @@ import enum
 
 class PathValues(str, enum.Enum):
     LOGS_ = "/logs/"
-    LOGS_USER_FN_ = "/logs/{user}/{fn}/"
+    LOGS_FN_ = "/logs/{fn}/"

@@ -4,7 +4,7 @@ port = 8010
 
 [kappa]
 data = "kappa-data:8020"
-fn-code = "kappa-fn-code:8030"
+fn_code = "kappa-fn-code:8030"
 logs = "kappa-logs:8050"
 runner = "kappa-runner:8060"
 

@@ -6,7 +6,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_log**](#create_log) | **post** /logs/ | Create Log
-[**get_logs**](#get_logs) | **get** /logs/{user}/{fn}/ | Get Logs
+[**get_logs**](#get_logs) | **get** /logs/{fn}/ | Get Logs
 
 # **create_log**
 <a name="create_log"></a>
@@ -35,10 +35,10 @@ with kappa_fn_logs_client.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     body = CreateLog(
-        user=1,
         fn=1,
-        exec_id=1,
-        content="content_example",
+        exec_id="exec_id_example",
+        stdout="stdout_example",
+        stderr="stderr_example",
     )
     try:
         # Create Log
@@ -111,7 +111,7 @@ No authorization required
 
 # **get_logs**
 <a name="get_logs"></a>
-> bool, date, datetime, dict, float, int, list, str, none_type get_logs(userfn)
+> bool, date, datetime, dict, float, int, list, str, none_type get_logs(fn)
 
 Get Logs
 
@@ -135,7 +135,6 @@ with kappa_fn_logs_client.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
-        'user': 1,
         'fn': 1,
     }
     try:
@@ -162,15 +161,7 @@ skip_deserialization | bool | default is False | when True, headers and body wil
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-user | UserSchema | | 
 fn | FnSchema | | 
-
-# UserSchema
-
-## Model Type Info
-Input Type | Accessed Type | Description | Notes
------------- | ------------- | ------------- | -------------
-decimal.Decimal, int,  | decimal.Decimal,  |  | 
 
 # FnSchema
 

@@ -36,28 +36,23 @@ class User(
     class MetaOapg:
         required = {
             "password",
-            "user_id",
             "login",
         }
         
         class properties:
-            user_id = schemas.IntSchema
             login = schemas.StrSchema
             password = schemas.StrSchema
+            user_id = schemas.IntSchema
             token = schemas.StrSchema
             __annotations__ = {
-                "user_id": user_id,
                 "login": login,
                 "password": password,
+                "user_id": user_id,
                 "token": token,
             }
     
     password: MetaOapg.properties.password
-    user_id: MetaOapg.properties.user_id
     login: MetaOapg.properties.login
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["user_id"]) -> MetaOapg.properties.user_id: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["login"]) -> MetaOapg.properties.login: ...
@@ -66,18 +61,18 @@ class User(
     def __getitem__(self, name: typing_extensions.Literal["password"]) -> MetaOapg.properties.password: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["user_id"]) -> MetaOapg.properties.user_id: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["token"]) -> MetaOapg.properties.token: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["user_id", "login", "password", "token", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["login", "password", "user_id", "token", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["user_id"]) -> MetaOapg.properties.user_id: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["login"]) -> MetaOapg.properties.login: ...
@@ -86,12 +81,15 @@ class User(
     def get_item_oapg(self, name: typing_extensions.Literal["password"]) -> MetaOapg.properties.password: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["user_id"]) -> typing.Union[MetaOapg.properties.user_id, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["token"]) -> typing.Union[MetaOapg.properties.token, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["user_id", "login", "password", "token", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["login", "password", "user_id", "token", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -99,8 +97,8 @@ class User(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         password: typing.Union[MetaOapg.properties.password, str, ],
-        user_id: typing.Union[MetaOapg.properties.user_id, decimal.Decimal, int, ],
         login: typing.Union[MetaOapg.properties.login, str, ],
+        user_id: typing.Union[MetaOapg.properties.user_id, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         token: typing.Union[MetaOapg.properties.token, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -109,8 +107,8 @@ class User(
             cls,
             *_args,
             password=password,
-            user_id=user_id,
             login=login,
+            user_id=user_id,
             token=token,
             _configuration=_configuration,
             **kwargs,

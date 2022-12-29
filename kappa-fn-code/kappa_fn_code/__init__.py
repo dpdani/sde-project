@@ -1,7 +1,7 @@
+import os
 from pathlib import Path
 
 from fastapi import Body, FastAPI, HTTPException
-from fastapi.staticfiles import StaticFiles
 from starlette import status
 
 from .config import config
@@ -32,4 +32,15 @@ def delete_code(code_id: str):
     code_path.unlink(missing_ok=True)
 
 
-app.mount("/code", StaticFiles(directory=config.code_folder), name="code")
+@app.get("/code/{code_id}/", response_model=str)
+def get_code(code_id: str):
+    code_path = Path(config.code_folder) / code_id
+    if not code_path.exists():
+        raise HTTPException(status.HTTP_404_NOT_FOUND)
+    with open(code_path, 'r') as f:
+        return f.read()
+
+
+@app.get("/code/", response_model=list[str])
+def get_code_ids():
+    return os.listdir(Path(config.code_folder))

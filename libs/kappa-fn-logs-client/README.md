@@ -155,10 +155,10 @@ with kappa_fn_logs_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     create_log = CreateLog(
-        user=1,
         fn=1,
-        exec_id=1,
-        content="content_example",
+        exec_id="exec_id_example",
+        stdout="stdout_example",
+        stderr="stderr_example",
     ) # CreateLog | 
 
     try:
@@ -176,7 +176,7 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**create_log**](docs/apis/tags/DefaultApi.md#create_log) | **post** /logs/ | Create Log
-*DefaultApi* | [**get_logs**](docs/apis/tags/DefaultApi.md#get_logs) | **get** /logs/{user}/{fn}/ | Get Logs
+*DefaultApi* | [**get_logs**](docs/apis/tags/DefaultApi.md#get_logs) | **get** /logs/{fn}/ | Get Logs
 
 ## Documentation For Models
 

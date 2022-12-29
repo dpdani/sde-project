@@ -13,8 +13,23 @@ class Server(BaseModel):
     port: int
 
 
+class Kappa(BaseModel):
+    data: str
+    fn_code: str
+    logs: str
+    runner: str
+
+
+class GitHub(BaseModel):
+    base_url: str
+    api_version: str
+    text: str
+
+
 class Config(BaseSettings):
     server: Server
+    kappa: Kappa
+    github: GitHub
 
     class Config:
         env_prefix = 'KAPPA_'

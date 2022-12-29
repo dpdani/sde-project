@@ -36,30 +36,27 @@ class CreateLog(
     class MetaOapg:
         required = {
             "exec_id",
+            "stdout",
             "fn",
-            "user",
-            "content",
+            "stderr",
         }
         
         class properties:
-            user = schemas.IntSchema
             fn = schemas.IntSchema
-            exec_id = schemas.IntSchema
-            content = schemas.StrSchema
+            exec_id = schemas.StrSchema
+            stdout = schemas.StrSchema
+            stderr = schemas.StrSchema
             __annotations__ = {
-                "user": user,
                 "fn": fn,
                 "exec_id": exec_id,
-                "content": content,
+                "stdout": stdout,
+                "stderr": stderr,
             }
     
     exec_id: MetaOapg.properties.exec_id
+    stdout: MetaOapg.properties.stdout
     fn: MetaOapg.properties.fn
-    user: MetaOapg.properties.user
-    content: MetaOapg.properties.content
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["user"]) -> MetaOapg.properties.user: ...
+    stderr: MetaOapg.properties.stderr
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["fn"]) -> MetaOapg.properties.fn: ...
@@ -68,18 +65,18 @@ class CreateLog(
     def __getitem__(self, name: typing_extensions.Literal["exec_id"]) -> MetaOapg.properties.exec_id: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["content"]) -> MetaOapg.properties.content: ...
+    def __getitem__(self, name: typing_extensions.Literal["stdout"]) -> MetaOapg.properties.stdout: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["stderr"]) -> MetaOapg.properties.stderr: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["user", "fn", "exec_id", "content", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["fn", "exec_id", "stdout", "stderr", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["user"]) -> MetaOapg.properties.user: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["fn"]) -> MetaOapg.properties.fn: ...
@@ -88,22 +85,25 @@ class CreateLog(
     def get_item_oapg(self, name: typing_extensions.Literal["exec_id"]) -> MetaOapg.properties.exec_id: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["content"]) -> MetaOapg.properties.content: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["stdout"]) -> MetaOapg.properties.stdout: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["stderr"]) -> MetaOapg.properties.stderr: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["user", "fn", "exec_id", "content", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["fn", "exec_id", "stdout", "stderr", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        exec_id: typing.Union[MetaOapg.properties.exec_id, decimal.Decimal, int, ],
+        exec_id: typing.Union[MetaOapg.properties.exec_id, str, ],
+        stdout: typing.Union[MetaOapg.properties.stdout, str, ],
         fn: typing.Union[MetaOapg.properties.fn, decimal.Decimal, int, ],
-        user: typing.Union[MetaOapg.properties.user, decimal.Decimal, int, ],
-        content: typing.Union[MetaOapg.properties.content, str, ],
+        stderr: typing.Union[MetaOapg.properties.stderr, str, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'CreateLog':
@@ -111,9 +111,9 @@ class CreateLog(
             cls,
             *_args,
             exec_id=exec_id,
+            stdout=stdout,
             fn=fn,
-            user=user,
-            content=content,
+            stderr=stderr,
             _configuration=_configuration,
             **kwargs,
         )

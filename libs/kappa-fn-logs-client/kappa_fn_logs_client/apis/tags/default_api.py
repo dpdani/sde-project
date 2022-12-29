@@ -10,7 +10,7 @@
 """
 
 from kappa_fn_logs_client.paths.logs_.post import CreateLog
-from kappa_fn_logs_client.paths.logs_user_fn_.get import GetLogs
+from kappa_fn_logs_client.paths.logs_fn_.get import GetLogs
 
 
 class DefaultApi(

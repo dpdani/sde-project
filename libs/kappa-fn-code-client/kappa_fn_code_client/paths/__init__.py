@@ -7,3 +7,4 @@ import enum
 
 class PathValues(str, enum.Enum):
     CODE_CODE_ID_ = "/code/{code_id}/"
+    CODE_ = "/code/"

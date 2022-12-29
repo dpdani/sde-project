@@ -11,8 +11,8 @@ create table kappa.user
 create table kappa.function
 (
     fn_id serial primary key,
-    name  text    not null,
-    owner integer not null references kappa.user (user_id),
+    "name"  text    not null,
+    owner integer not null references kappa.user (user_id) on delete cascade,
 
     unique (owner, name)
 );
@@ -20,9 +20,13 @@ create table kappa.function
 create table kappa.kappa_log
 (
     log_id  serial primary key,
-    time    timestamp with time zone default now(),
+    "time"    timestamp with time zone default now(),
+    "user"    integer references kappa.user (user_id) on delete cascade,
+    fn      integer references kappa.function (fn_id) on delete cascade,
     content jsonb not null
 );
 
-create user kappadata;
-grant all privileges on schema kappa to kappadata;
+create
+user kappadata;
+grant all privileges on schema
+kappa to kappadata;

@@ -140,6 +140,28 @@ Please follow the [installation procedure](#installation--usage) and then run th
 import time
 import kappa_runner_client
 from pprint import pprint
+from kappa_runner_client.apis.tags import default_api
+from kappa_runner_client.model.function_to_load import FunctionToLoad
+from kappa_runner_client.model.http_validation_error import HTTPValidationError
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = kappa_runner_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with kappa_runner_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = default_api.DefaultApi(api_client)
+    fn_id = 1 # int | 
+
+    try:
+        # Execute Function
+        api_response = api_instance.execute_function(fn_id)
+        pprint(api_response)
+    except kappa_runner_client.ApiException as e:
+        print("Exception when calling DefaultApi->execute_function: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -148,15 +170,23 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**execute_function**](docs/apis/tags/DefaultApi.md#execute_function) | **get** /functions/{fn_id}/ | Execute Function
+*DefaultApi* | [**is_function_loaded**](docs/apis/tags/DefaultApi.md#is_function_loaded) | **get** /functions/{fn_id}/isLoaded | Is Function Loaded
+*DefaultApi* | [**load_function**](docs/apis/tags/DefaultApi.md#load_function) | **post** /functions/load | Load Function
+*DefaultApi* | [**unload_function**](docs/apis/tags/DefaultApi.md#unload_function) | **delete** /functions/{fn_id}/ | Unload Function
 
 ## Documentation For Models
 
+ - [FunctionToLoad](docs/models/FunctionToLoad.md)
+ - [HTTPValidationError](docs/models/HTTPValidationError.md)
+ - [ValidationError](docs/models/ValidationError.md)
 
 ## Documentation For Authorization
 
  All endpoints do not require authorization.
 
 ## Author
+
 
 
 ## Notes for Large OpenAPI documents

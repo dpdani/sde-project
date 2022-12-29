@@ -11,3 +11,7 @@
 # import sys
 # sys.setrecursionlimit(n)
 
+from kappa_logs_client.model.http_validation_error import HTTPValidationError
+from kappa_logs_client.model.log import Log
+from kappa_logs_client.model.logs import Logs
+from kappa_logs_client.model.validation_error import ValidationError
