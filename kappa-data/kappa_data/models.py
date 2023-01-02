@@ -19,22 +19,22 @@ def get_db():
 
 
 class User(SQLModel, table=True):
-    user_id: int | None = Field(primary_key=True)
+    user_id: int | None = Field(None, primary_key=True)
     login: str = Field(unique=True)
     password: str
-    token: str | None
+    token: str | None = None
 
     @classmethod
     def get(cls, db: Session, login: str):
-        result, *_ = db.exec(
+        return db.exec(
             select(cls)
             .where(cls.login == login)
-        )
-        return result
+        ).first()
 
     @classmethod
     def signup(cls, db: Session, login: str, password: str):
         db.add(cls(login=login, password=password))
+        db.commit()
 
 
 class Function(SQLModel, table=True):
@@ -45,17 +45,15 @@ class Function(SQLModel, table=True):
 
     @classmethod
     def get(cls, db: Session, owner: int, name: str) -> Self:
-        result, *_ = db.exec(
+        return db.exec(
             select(cls)
             .where(cls.owner == owner)
             .where(cls.name == name)
-        )
-        return result
+        ).first()
 
     @classmethod
     def get_by_id(cls, db: Session, fn_id: int) -> Self:
-        result, *_ = db.get(cls, fn_id)
-        return result
+        return db.get(cls, fn_id)
 
 
 class KappaLog(SQLModel, table=True):

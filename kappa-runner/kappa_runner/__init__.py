@@ -53,17 +53,32 @@ class FunctionToLoad(BaseModel):
     code_id: str
 
 
-@app.post("/functions/load")
+@app.post("/functions/load", responses={
+    status.HTTP_406_NOT_ACCEPTABLE: {
+        "description": "Code not acceptable",
+    }
+})
 def load_function(fn: FunctionToLoad, kappa_data: KappaDataApi = Depends(get_kappa_data),
                   kappa_code: KappaCodeApi = Depends(get_kappa_code)):
     fn = kappa_data.get_function_by_id(path_params={"fn_id": fn.fn_id}).body
-    code = kappa_code.get_code(path_params={"code_id": fn.code_id}).body.as_str_oapg
-    runner.load_function(fn.fn_id, code)
+    code = kappa_code.get_code(path_params={"code_id": fn["code_id"]}).body.as_str_oapg
+    try:
+        runner.load_function(fn["fn_id"], code)
+    except runner.InvalidCode:
+        raise HTTPException(status.HTTP_406_NOT_ACCEPTABLE,
+                            detail="Invalid code.")
+    except runner.NoMainException:
+        raise HTTPException(status.HTTP_406_NOT_ACCEPTABLE,
+                            detail="Function 'main()' not found inside code.")
 
 
-@app.get("/functions/{fn_id}/isLoaded", response_model=bool)
+class LoadedFunction(BaseModel):
+    loaded: bool
+
+
+@app.get("/functions/{fn_id}/isLoaded", response_model=LoadedFunction)
 def is_function_loaded(fn_id: int):
-    return fn_id in runner.loaded_functions
+    return LoadedFunction(loaded=fn_id in runner.loaded_functions)
 
 
 class Execution(BaseModel):

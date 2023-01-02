@@ -6,6 +6,7 @@ README.md
 docs/apis/tags/DefaultApi.md
 docs/models/FunctionToLoad.md
 docs/models/HTTPValidationError.md
+docs/models/LoadedFunction.md
 docs/models/ValidationError.md
 git_push.sh
 kappa_runner_client/__init__.py
@@ -19,6 +20,8 @@ kappa_runner_client/model/function_to_load.py
 kappa_runner_client/model/function_to_load.pyi
 kappa_runner_client/model/http_validation_error.py
 kappa_runner_client/model/http_validation_error.pyi
+kappa_runner_client/model/loaded_function.py
+kappa_runner_client/model/loaded_function.pyi
 kappa_runner_client/model/validation_error.py
 kappa_runner_client/model/validation_error.pyi
 kappa_runner_client/models/__init__.py
@@ -32,5 +35,6 @@ test/__init__.py
 test/test_models/__init__.py
 test/test_models/test_function_to_load.py
 test/test_models/test_http_validation_error.py
+test/test_models/test_loaded_function.py
 test/test_models/test_validation_error.py
 tox.ini

@@ -13,8 +13,9 @@ def read_conf_file(_: BaseSettings):
 
 
 def write_conf_file():
-    with open(conf_path, 'wb') as f:
-        return tomlkit.dump(config.dict(), f)
+    content = tomlkit.dumps(config.dict())
+    with open(conf_path, 'w') as f:
+        f.write(content)
 
 
 class Config(BaseSettings):

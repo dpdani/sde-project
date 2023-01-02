@@ -27,7 +27,7 @@ from kappa_client import schemas  # noqa: F401
 
 from kappa_client.model.create_function import CreateFunction
 from kappa_client.model.http_validation_error import HTTPValidationError
-from kappa_client.model.function import Function
+from kappa_client.model.created_function import CreatedFunction
 
 # body param
 SchemaForRequestBodyApplicationJson = CreateFunction
@@ -40,7 +40,7 @@ request_body_create_function = api_client.RequestBody(
     },
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = Function
+SchemaFor200ResponseBodyApplicationJson = CreatedFunction
 
 
 @dataclass
@@ -58,6 +58,18 @@ _response_for_200 = api_client.OpenApiResponse(
         'application/json': api_client.MediaType(
             schema=SchemaFor200ResponseBodyApplicationJson),
     },
+)
+
+
+@dataclass
+class ApiResponseFor406(api_client.ApiResponse):
+    response: urllib3.HTTPResponse
+    body: schemas.Unset = schemas.unset
+    headers: schemas.Unset = schemas.unset
+
+
+_response_for_406 = api_client.OpenApiResponse(
+    response_cls=ApiResponseFor406,
 )
 SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
 

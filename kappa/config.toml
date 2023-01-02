@@ -3,12 +3,16 @@ host = "0.0.0.0"
 port = 8010
 
 [kappa]
-data = "kappa-data:8020"
-fn_code = "kappa-fn-code:8030"
-logs = "kappa-logs:8050"
-runner = "kappa-runner:8060"
+data = "http://localhost:8020"
+fn_code = "http://localhost:8030"
+logs = "http://localhost:8050"
+runner = "http://localhost:8060"
+#data = "http://kappa-data:8020"
+#fn_code = "http://kappa-fn-code:8030"
+#logs = "http://kappa-logs:8050"
+#runner = "http://kappa-runner:8060"
 
 [github]
 base_url = "https://github.com"
-api_version = ""
+api_version = "2022-11-28"
 text = "You may also be intereseted in these open source projects"

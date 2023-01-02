@@ -6,11 +6,7 @@ import enum
 
 
 class PathValues(str, enum.Enum):
-    LOGIN_ = "/login/"
     SIGNUP_ = "/signup/"
-    USERS_ME_ = "/users/me/"
+    LOGIN_ = "/login/"
     FUNCTIONS_ = "/functions/"
-    FUNCTIONS_FN_NAME_ = "/functions/{fn_name}/"
-    FUNCTIONS_ID_FN_ID_ = "/functions/id/{fn_id}/"
-    FUNCTIONS_FN_NAME_LOGS_ = "/functions/{fn_name}/logs/"
-    FUNCTIONS_FN_ID_LOGS_EXECUTION_EXEC_ID = "/functions/{fn_id}/logs/execution/{exec_id}"
+    FUNCTIONS_FN_NAME = "/functions/{fn_name}"

@@ -3,5 +3,5 @@ host = "0.0.0.0"
 port = 8050
 
 [kappa]
-data = "kappa-data:8010"
-fn_logs = "kappa-fn-logs:8030"
+data = "http://kappa-data:8010"
+fn_logs = "http://kappa-fn-logs:8030"

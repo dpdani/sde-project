@@ -3,6 +3,10 @@ host = "0.0.0.0"
 port = 8060
 
 [kappa]
-data = "kappa-data:8020"
-fn_code = "kappa-fn-code:8030"
-fn_logs = "kappa-fn-logs:8040"
+data = "http://localhost:8020"
+fn_code = "http://localhost:8030"
+fn_logs = "http://localhost:8040"
+
+#data = "http://kappa-data:8020"
+#fn_code = "http://kappa-fn-code:8030"
+#fn_logs = "http://kappa-fn-logs:8040"

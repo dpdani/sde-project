@@ -20,11 +20,18 @@ class FunctionLoaded(Exception):
     pass
 
 
+class InvalidCode(Exception):
+    pass
+
+
 def load_function(fn_id: int, code: str):
     if fn_id in loaded_functions:
         raise FunctionLoaded
     mod = ModuleType(f'fn_{fn_id}')
-    exec(code, mod.__dict__)
+    try:
+        exec(code, mod.__dict__)
+    except:
+        raise InvalidCode
     if not hasattr(mod, "main"):
         raise NoMainException
     if not callable(mod.main):

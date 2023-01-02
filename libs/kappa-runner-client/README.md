@@ -143,6 +143,7 @@ from pprint import pprint
 from kappa_runner_client.apis.tags import default_api
 from kappa_runner_client.model.function_to_load import FunctionToLoad
 from kappa_runner_client.model.http_validation_error import HTTPValidationError
+from kappa_runner_client.model.loaded_function import LoadedFunction
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = kappa_runner_client.Configuration(
@@ -179,6 +180,7 @@ Class | Method | HTTP request | Description
 
  - [FunctionToLoad](docs/models/FunctionToLoad.md)
  - [HTTPValidationError](docs/models/HTTPValidationError.md)
+ - [LoadedFunction](docs/models/LoadedFunction.md)
  - [ValidationError](docs/models/ValidationError.md)
 
 ## Documentation For Authorization

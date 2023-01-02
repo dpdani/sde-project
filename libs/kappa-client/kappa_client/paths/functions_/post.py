@@ -27,7 +27,7 @@ from kappa_client import schemas  # noqa: F401
 
 from kappa_client.model.create_function import CreateFunction
 from kappa_client.model.http_validation_error import HTTPValidationError
-from kappa_client.model.function import Function
+from kappa_client.model.created_function import CreatedFunction
 
 from . import path
 
@@ -45,7 +45,7 @@ request_body_create_function = api_client.RequestBody(
 _auth = [
     'OAuth2PasswordBearer',
 ]
-SchemaFor200ResponseBodyApplicationJson = Function
+SchemaFor200ResponseBodyApplicationJson = CreatedFunction
 
 
 @dataclass
@@ -63,6 +63,18 @@ _response_for_200 = api_client.OpenApiResponse(
         'application/json': api_client.MediaType(
             schema=SchemaFor200ResponseBodyApplicationJson),
     },
+)
+
+
+@dataclass
+class ApiResponseFor406(api_client.ApiResponse):
+    response: urllib3.HTTPResponse
+    body: schemas.Unset = schemas.unset
+    headers: schemas.Unset = schemas.unset
+
+
+_response_for_406 = api_client.OpenApiResponse(
+    response_cls=ApiResponseFor406,
 )
 SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
 
@@ -85,6 +97,7 @@ _response_for_422 = api_client.OpenApiResponse(
 )
 _status_code_to_response = {
     '200': _response_for_200,
+    '406': _response_for_406,
     '422': _response_for_422,
 }
 _all_accept_content_types = (

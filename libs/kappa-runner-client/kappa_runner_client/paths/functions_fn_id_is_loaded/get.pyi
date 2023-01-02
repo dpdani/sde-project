@@ -26,6 +26,7 @@ import frozendict  # noqa: F401
 from kappa_runner_client import schemas  # noqa: F401
 
 from kappa_runner_client.model.http_validation_error import HTTPValidationError
+from kappa_runner_client.model.loaded_function import LoadedFunction
 
 # Path params
 FnIdSchema = schemas.IntSchema
@@ -53,7 +54,7 @@ request_path_fn_id = api_client.PathParameter(
     schema=FnIdSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = schemas.BoolSchema
+SchemaFor200ResponseBodyApplicationJson = LoadedFunction
 
 
 @dataclass

@@ -142,13 +142,9 @@ import kappa_client
 from pprint import pprint
 from kappa_client.apis.tags import default_api
 from kappa_client.model.create_function import CreateFunction
-from kappa_client.model.function import Function
+from kappa_client.model.created_function import CreatedFunction
 from kappa_client.model.http_validation_error import HTTPValidationError
-from kappa_client.model.kappa_log import KappaLog
 from kappa_client.model.login_user import LoginUser
-from kappa_client.model.status import Status
-from kappa_client.model.successful_login import SuccessfulLogin
-from kappa_client.model.user import User
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = kappa_client.Configuration(
@@ -172,7 +168,7 @@ with kappa_client.ApiClient(configuration) as api_client:
     api_instance = default_api.DefaultApi(api_client)
     create_function = CreateFunction(
         name="name_example",
-        code_id="code_id_example",
+        code="code_example",
     ) # CreateFunction | 
 
     try:
@@ -190,25 +186,18 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**create_function**](docs/apis/tags/DefaultApi.md#create_function) | **post** /functions/ | Create Function
-*DefaultApi* | [**delete_function**](docs/apis/tags/DefaultApi.md#delete_function) | **delete** /functions/{fn_name}/ | Delete Function
-*DefaultApi* | [**get_function**](docs/apis/tags/DefaultApi.md#get_function) | **get** /functions/{fn_name}/ | Get Function
-*DefaultApi* | [**get_function_by_id**](docs/apis/tags/DefaultApi.md#get_function_by_id) | **get** /functions/id/{fn_id}/ | Get Function By Id
-*DefaultApi* | [**get_function_logs**](docs/apis/tags/DefaultApi.md#get_function_logs) | **get** /functions/{fn_name}/logs/ | Get Function Logs
-*DefaultApi* | [**get_me**](docs/apis/tags/DefaultApi.md#get_me) | **get** /users/me/ | Get Me
-*DefaultApi* | [**log_function_execution**](docs/apis/tags/DefaultApi.md#log_function_execution) | **post** /functions/{fn_id}/logs/execution/{exec_id} | Log Function Execution
+*DefaultApi* | [**delete_function**](docs/apis/tags/DefaultApi.md#delete_function) | **delete** /functions/{fn_name} | Delete Function
+*DefaultApi* | [**execute_function**](docs/apis/tags/DefaultApi.md#execute_function) | **get** /functions/{fn_name} | Execute Function
 *DefaultApi* | [**login**](docs/apis/tags/DefaultApi.md#login) | **post** /login/ | Login
 *DefaultApi* | [**signup**](docs/apis/tags/DefaultApi.md#signup) | **post** /signup/ | Signup
 
 ## Documentation For Models
 
  - [CreateFunction](docs/models/CreateFunction.md)
- - [Function](docs/models/Function.md)
+ - [CreatedFunction](docs/models/CreatedFunction.md)
+ - [GitHubResponse](docs/models/GitHubResponse.md)
  - [HTTPValidationError](docs/models/HTTPValidationError.md)
- - [KappaLog](docs/models/KappaLog.md)
  - [LoginUser](docs/models/LoginUser.md)
- - [Status](docs/models/Status.md)
- - [SuccessfulLogin](docs/models/SuccessfulLogin.md)
- - [User](docs/models/User.md)
  - [ValidationError](docs/models/ValidationError.md)
 
 ## Documentation For Authorization

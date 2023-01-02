@@ -12,11 +12,8 @@
 # sys.setrecursionlimit(n)
 
 from kappa_client.model.create_function import CreateFunction
-from kappa_client.model.function import Function
+from kappa_client.model.created_function import CreatedFunction
+from kappa_client.model.git_hub_response import GitHubResponse
 from kappa_client.model.http_validation_error import HTTPValidationError
-from kappa_client.model.kappa_log import KappaLog
 from kappa_client.model.login_user import LoginUser
-from kappa_client.model.status import Status
-from kappa_client.model.successful_login import SuccessfulLogin
-from kappa_client.model.user import User
 from kappa_client.model.validation_error import ValidationError

@@ -1,5 +1,5 @@
 kappa-client:
-	wget localhost:8020/openapi.json -O openapi-kappa.json
+	wget localhost:8010/openapi.json -O openapi-kappa.json
 	rm -rf libs/kappa-client
 	docker run --rm \
 		-v "$(PWD):/local" openapitools/openapi-generator-cli generate \

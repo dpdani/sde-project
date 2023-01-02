@@ -2,11 +2,12 @@ from typing import Self
 
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session
 from starlette import status
 
 from kappa_data.models import Function, KappaLog, User, get_db
-from kappa_data.security import authenticate_user, create_access_token, get_current_user
+from kappa_data.security import authenticate_user, create_access_token, get_current_user, get_password_hash
 
 
 app = FastAPI(
@@ -47,6 +48,9 @@ def login(user: LoginUser, db: Session = Depends(get_db)):
     access_token = create_access_token(
         data={"sub": user.login}
     )
+    user.token = access_token
+    db.add(user)
+    db.commit()
     return SuccessfulLogin(
         access_token=access_token,
         token_type="bearer",
@@ -55,7 +59,7 @@ def login(user: LoginUser, db: Session = Depends(get_db)):
 
 @app.post("/signup/", response_model=Status)
 def signup(user: LoginUser, db: Session = Depends(get_db)):
-    User.signup(db, user.username, user.password)
+    User.signup(db, user.username, get_password_hash(user.password))
     return Status.ok()
 
 
@@ -77,11 +81,16 @@ def create_function(function: CreateFunction, user: User = Depends(get_current_u
         code_id=function.code_id,
         owner=user.user_id,
     )
-    db.add(fn)
+    try:
+        db.add(fn)
+        db.commit()
+    except IntegrityError:
+        raise HTTPException(status.HTTP_409_CONFLICT)
     fn = Function.get(db, fn.owner, fn.name)
-    KappaLog.add(db, fn.owner, fn.name, {
+    KappaLog.add(db, fn.owner, fn.fn_id, {
         "status": "created"
     })
+    db.commit()
     return fn
 
 
@@ -103,7 +112,7 @@ def get_function_logs(fn_name: str, user: User = Depends(get_current_user), db: 
 @app.post("/functions/{fn_id}/logs/execution/{exec_id}", response_model=Status)
 def log_function_execution(fn_id: int, exec_id: str, db: Session = Depends(get_db)):
     fn = Function.get_by_id(db, fn_id)
-    KappaLog.add(db, fn.owner, fn.name, {
+    KappaLog.add(db, fn.owner, fn.fn_id, {
         "execution": "started",
         "exec_id": exec_id,
     })
@@ -116,4 +125,5 @@ def delete_function(fn_name: str, user: User = Depends(get_current_user), db: Se
     if fn is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND)
     db.delete(fn)
+    db.commit()
     return Status(status="deleted")

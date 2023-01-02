@@ -114,7 +114,7 @@ No authorization required
 
 # **is_function_loaded**
 <a name="is_function_loaded"></a>
-> bool is_function_loaded(fn_id)
+> LoadedFunction is_function_loaded(fn_id)
 
 Is Function Loaded
 
@@ -124,6 +124,7 @@ Is Function Loaded
 import kappa_runner_client
 from kappa_runner_client.apis.tags import default_api
 from kappa_runner_client.model.http_validation_error import HTTPValidationError
+from kappa_runner_client.model.loaded_function import LoadedFunction
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -189,11 +190,10 @@ body | typing.Union[SchemaFor200ResponseBodyApplicationJson, ] |  |
 headers | Unset | headers were not defined |
 
 # SchemaFor200ResponseBodyApplicationJson
+Type | Description  | Notes
+------------- | ------------- | -------------
+[**LoadedFunction**](../../models/LoadedFunction.md) |  | 
 
-## Model Type Info
-Input Type | Accessed Type | Description | Notes
------------- | ------------- | ------------- | -------------
-bool,  | BoolClass,  |  | 
 
 #### is_function_loaded.ApiResponseFor422
 Name | Type | Description  | Notes
@@ -278,6 +278,7 @@ Code | Class | Description
 ------------- | ------------- | -------------
 n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
 200 | [ApiResponseFor200](#load_function.ApiResponseFor200) | Successful Response
+406 | [ApiResponseFor406](#load_function.ApiResponseFor406) | Code not acceptable.
 422 | [ApiResponseFor422](#load_function.ApiResponseFor422) | Validation Error
 
 #### load_function.ApiResponseFor200
@@ -293,6 +294,13 @@ headers | Unset | headers were not defined |
 Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader,  | frozendict.frozendict, str, decimal.Decimal, BoolClass, NoneClass, tuple, bytes, FileIO |  | 
+
+#### load_function.ApiResponseFor406
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+response | urllib3.HTTPResponse | Raw response |
+body | Unset | body was not defined |
+headers | Unset | headers were not defined |
 
 #### load_function.ApiResponseFor422
 Name | Type | Description  | Notes

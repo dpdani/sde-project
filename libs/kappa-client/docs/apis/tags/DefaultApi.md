@@ -6,18 +6,14 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_function**](#create_function) | **post** /functions/ | Create Function
-[**delete_function**](#delete_function) | **delete** /functions/{fn_name}/ | Delete Function
-[**get_function**](#get_function) | **get** /functions/{fn_name}/ | Get Function
-[**get_function_by_id**](#get_function_by_id) | **get** /functions/id/{fn_id}/ | Get Function By Id
-[**get_function_logs**](#get_function_logs) | **get** /functions/{fn_name}/logs/ | Get Function Logs
-[**get_me**](#get_me) | **get** /users/me/ | Get Me
-[**log_function_execution**](#log_function_execution) | **post** /functions/{fn_id}/logs/execution/{exec_id} | Log Function Execution
+[**delete_function**](#delete_function) | **delete** /functions/{fn_name} | Delete Function
+[**execute_function**](#execute_function) | **get** /functions/{fn_name} | Execute Function
 [**login**](#login) | **post** /login/ | Login
 [**signup**](#signup) | **post** /signup/ | Signup
 
 # **create_function**
 <a name="create_function"></a>
-> Function create_function(create_function)
+> CreatedFunction create_function(create_function)
 
 Create Function
 
@@ -29,7 +25,7 @@ import kappa_client
 from kappa_client.apis.tags import default_api
 from kappa_client.model.create_function import CreateFunction
 from kappa_client.model.http_validation_error import HTTPValidationError
-from kappa_client.model.function import Function
+from kappa_client.model.created_function import CreatedFunction
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -55,7 +51,7 @@ with kappa_client.ApiClient(configuration) as api_client:
     # example passing only required values which don't have defaults set
     body = CreateFunction(
         name="name_example",
-        code_id="code_id_example",
+        code="code_example",
     )
     try:
         # Create Function
@@ -91,6 +87,7 @@ Code | Class | Description
 ------------- | ------------- | -------------
 n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
 200 | [ApiResponseFor200](#create_function.ApiResponseFor200) | Successful Response
+406 | [ApiResponseFor406](#create_function.ApiResponseFor406) | Code not acceptable
 422 | [ApiResponseFor422](#create_function.ApiResponseFor422) | Validation Error
 
 #### create_function.ApiResponseFor200
@@ -103,8 +100,15 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**Function**](../../models/Function.md) |  | 
+[**CreatedFunction**](../../models/CreatedFunction.md) |  | 
 
+
+#### create_function.ApiResponseFor406
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+response | urllib3.HTTPResponse | Raw response |
+body | Unset | body was not defined |
+headers | Unset | headers were not defined |
 
 #### create_function.ApiResponseFor422
 Name | Type | Description  | Notes
@@ -127,7 +131,7 @@ Type | Description  | Notes
 
 # **delete_function**
 <a name="delete_function"></a>
-> Status delete_function(fn_name)
+> bool, date, datetime, dict, float, int, list, str, none_type delete_function(fn_name)
 
 Delete Function
 
@@ -138,7 +142,6 @@ Delete Function
 import kappa_client
 from kappa_client.apis.tags import default_api
 from kappa_client.model.http_validation_error import HTTPValidationError
-from kappa_client.model.status import Status
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -165,10 +168,31 @@ with kappa_client.ApiClient(configuration) as api_client:
     path_params = {
         'fn_name': "fn_name_example",
     }
+    query_params = {
+    }
     try:
         # Delete Function
         api_response = api_instance.delete_function(
             path_params=path_params,
+            query_params=query_params,
+        )
+        pprint(api_response)
+    except kappa_client.ApiException as e:
+        print("Exception when calling DefaultApi->delete_function: %s\n" % e)
+
+    # example passing only optional values
+    path_params = {
+        'fn_name': "fn_name_example",
+    }
+    query_params = {
+        'header_name': "header_name_example",
+        'header_value': "header_value_example",
+    }
+    try:
+        # Delete Function
+        api_response = api_instance.delete_function(
+            path_params=path_params,
+            query_params=query_params,
         )
         pprint(api_response)
     except kappa_client.ApiException as e:
@@ -178,11 +202,35 @@ with kappa_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+query_params | RequestQueryParams | |
 path_params | RequestPathParams | |
 accept_content_types | typing.Tuple[str] | default is ('application/json', ) | Tells the server the content type(s) that are accepted by the client
 stream | bool | default is False | if True then the response.content will be streamed and loaded from a file like object. When downloading a file, set this to True to force the code to deserialize the content to a FileSchema file
 timeout | typing.Optional[typing.Union[int, typing.Tuple]] | default is None | the timeout used by the rest client
 skip_deserialization | bool | default is False | when True, headers and body will be unset and an instance of api_client.ApiResponseWithoutDeserialization will be returned
+
+### query_params
+#### RequestQueryParams
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+header_name | HeaderNameSchema | | optional
+header_value | HeaderValueSchema | | optional
+
+
+# HeaderNameSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# HeaderValueSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 ### path_params
 #### RequestPathParams
@@ -214,10 +262,11 @@ body | typing.Union[SchemaFor200ResponseBodyApplicationJson, ] |  |
 headers | Unset | headers were not defined |
 
 # SchemaFor200ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**Status**](../../models/Status.md) |  | 
 
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader,  | frozendict.frozendict, str, decimal.Decimal, BoolClass, NoneClass, tuple, bytes, FileIO |  | 
 
 #### delete_function.ApiResponseFor422
 Name | Type | Description  | Notes
@@ -238,11 +287,11 @@ Type | Description  | Notes
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
-# **get_function**
-<a name="get_function"></a>
-> Function get_function(fn_name)
+# **execute_function**
+<a name="execute_function"></a>
+> bool, date, datetime, dict, float, int, list, str, none_type execute_function(fn_name)
 
-Get Function
+Execute Function
 
 ### Example
 
@@ -251,7 +300,6 @@ Get Function
 import kappa_client
 from kappa_client.apis.tags import default_api
 from kappa_client.model.http_validation_error import HTTPValidationError
-from kappa_client.model.function import Function
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -278,239 +326,69 @@ with kappa_client.ApiClient(configuration) as api_client:
     path_params = {
         'fn_name': "fn_name_example",
     }
-    try:
-        # Get Function
-        api_response = api_instance.get_function(
-            path_params=path_params,
-        )
-        pprint(api_response)
-    except kappa_client.ApiException as e:
-        print("Exception when calling DefaultApi->get_function: %s\n" % e)
-```
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-path_params | RequestPathParams | |
-accept_content_types | typing.Tuple[str] | default is ('application/json', ) | Tells the server the content type(s) that are accepted by the client
-stream | bool | default is False | if True then the response.content will be streamed and loaded from a file like object. When downloading a file, set this to True to force the code to deserialize the content to a FileSchema file
-timeout | typing.Optional[typing.Union[int, typing.Tuple]] | default is None | the timeout used by the rest client
-skip_deserialization | bool | default is False | when True, headers and body will be unset and an instance of api_client.ApiResponseWithoutDeserialization will be returned
-
-### path_params
-#### RequestPathParams
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-fn_name | FnNameSchema | | 
-
-# FnNameSchema
-
-## Model Type Info
-Input Type | Accessed Type | Description | Notes
------------- | ------------- | ------------- | -------------
-str,  | str,  |  | 
-
-### Return Types, Responses
-
-Code | Class | Description
-------------- | ------------- | -------------
-n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
-200 | [ApiResponseFor200](#get_function.ApiResponseFor200) | Successful Response
-422 | [ApiResponseFor422](#get_function.ApiResponseFor422) | Validation Error
-
-#### get_function.ApiResponseFor200
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-response | urllib3.HTTPResponse | Raw response |
-body | typing.Union[SchemaFor200ResponseBodyApplicationJson, ] |  |
-headers | Unset | headers were not defined |
-
-# SchemaFor200ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**Function**](../../models/Function.md) |  | 
-
-
-#### get_function.ApiResponseFor422
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-response | urllib3.HTTPResponse | Raw response |
-body | typing.Union[SchemaFor422ResponseBodyApplicationJson, ] |  |
-headers | Unset | headers were not defined |
-
-# SchemaFor422ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**HTTPValidationError**](../../models/HTTPValidationError.md) |  | 
-
-
-### Authorization
-
-[OAuth2PasswordBearer](../../../README.md#OAuth2PasswordBearer)
-
-[[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-
-# **get_function_by_id**
-<a name="get_function_by_id"></a>
-> Function get_function_by_id(fn_id)
-
-Get Function By Id
-
-### Example
-
-```python
-import kappa_client
-from kappa_client.apis.tags import default_api
-from kappa_client.model.http_validation_error import HTTPValidationError
-from kappa_client.model.function import Function
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = kappa_client.Configuration(
-    host = "http://localhost"
-)
-
-# Enter a context with an instance of the API client
-with kappa_client.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = default_api.DefaultApi(api_client)
-
-    # example passing only required values which don't have defaults set
-    path_params = {
-        'fn_id': 1,
+    query_params = {
     }
     try:
-        # Get Function By Id
-        api_response = api_instance.get_function_by_id(
+        # Execute Function
+        api_response = api_instance.execute_function(
             path_params=path_params,
+            query_params=query_params,
         )
         pprint(api_response)
     except kappa_client.ApiException as e:
-        print("Exception when calling DefaultApi->get_function_by_id: %s\n" % e)
-```
-### Parameters
+        print("Exception when calling DefaultApi->execute_function: %s\n" % e)
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-path_params | RequestPathParams | |
-accept_content_types | typing.Tuple[str] | default is ('application/json', ) | Tells the server the content type(s) that are accepted by the client
-stream | bool | default is False | if True then the response.content will be streamed and loaded from a file like object. When downloading a file, set this to True to force the code to deserialize the content to a FileSchema file
-timeout | typing.Optional[typing.Union[int, typing.Tuple]] | default is None | the timeout used by the rest client
-skip_deserialization | bool | default is False | when True, headers and body will be unset and an instance of api_client.ApiResponseWithoutDeserialization will be returned
-
-### path_params
-#### RequestPathParams
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-fn_id | FnIdSchema | | 
-
-# FnIdSchema
-
-## Model Type Info
-Input Type | Accessed Type | Description | Notes
------------- | ------------- | ------------- | -------------
-decimal.Decimal, int,  | decimal.Decimal,  |  | 
-
-### Return Types, Responses
-
-Code | Class | Description
-------------- | ------------- | -------------
-n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
-200 | [ApiResponseFor200](#get_function_by_id.ApiResponseFor200) | Successful Response
-422 | [ApiResponseFor422](#get_function_by_id.ApiResponseFor422) | Validation Error
-
-#### get_function_by_id.ApiResponseFor200
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-response | urllib3.HTTPResponse | Raw response |
-body | typing.Union[SchemaFor200ResponseBodyApplicationJson, ] |  |
-headers | Unset | headers were not defined |
-
-# SchemaFor200ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**Function**](../../models/Function.md) |  | 
-
-
-#### get_function_by_id.ApiResponseFor422
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-response | urllib3.HTTPResponse | Raw response |
-body | typing.Union[SchemaFor422ResponseBodyApplicationJson, ] |  |
-headers | Unset | headers were not defined |
-
-# SchemaFor422ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**HTTPValidationError**](../../models/HTTPValidationError.md) |  | 
-
-
-### Authorization
-
-No authorization required
-
-[[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-
-# **get_function_logs**
-<a name="get_function_logs"></a>
-> [KappaLog] get_function_logs(fn_name)
-
-Get Function Logs
-
-### Example
-
-* OAuth Authentication (OAuth2PasswordBearer):
-```python
-import kappa_client
-from kappa_client.apis.tags import default_api
-from kappa_client.model.http_validation_error import HTTPValidationError
-from kappa_client.model.kappa_log import KappaLog
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = kappa_client.Configuration(
-    host = "http://localhost"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-# Configure OAuth2 access token for authorization: OAuth2PasswordBearer
-configuration = kappa_client.Configuration(
-    host = "http://localhost",
-    access_token = 'YOUR_ACCESS_TOKEN'
-)
-# Enter a context with an instance of the API client
-with kappa_client.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = default_api.DefaultApi(api_client)
-
-    # example passing only required values which don't have defaults set
+    # example passing only optional values
     path_params = {
         'fn_name': "fn_name_example",
     }
+    query_params = {
+        'header_name': "header_name_example",
+        'header_value': "header_value_example",
+    }
     try:
-        # Get Function Logs
-        api_response = api_instance.get_function_logs(
+        # Execute Function
+        api_response = api_instance.execute_function(
             path_params=path_params,
+            query_params=query_params,
         )
         pprint(api_response)
     except kappa_client.ApiException as e:
-        print("Exception when calling DefaultApi->get_function_logs: %s\n" % e)
+        print("Exception when calling DefaultApi->execute_function: %s\n" % e)
 ```
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+query_params | RequestQueryParams | |
 path_params | RequestPathParams | |
 accept_content_types | typing.Tuple[str] | default is ('application/json', ) | Tells the server the content type(s) that are accepted by the client
 stream | bool | default is False | if True then the response.content will be streamed and loaded from a file like object. When downloading a file, set this to True to force the code to deserialize the content to a FileSchema file
 timeout | typing.Optional[typing.Union[int, typing.Tuple]] | default is None | the timeout used by the rest client
 skip_deserialization | bool | default is False | when True, headers and body will be unset and an instance of api_client.ApiResponseWithoutDeserialization will be returned
+
+### query_params
+#### RequestQueryParams
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+header_name | HeaderNameSchema | | optional
+header_value | HeaderValueSchema | | optional
+
+
+# HeaderNameSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# HeaderValueSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 ### path_params
 #### RequestPathParams
@@ -531,10 +409,10 @@ str,  | str,  |  |
 Code | Class | Description
 ------------- | ------------- | -------------
 n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
-200 | [ApiResponseFor200](#get_function_logs.ApiResponseFor200) | Successful Response
-422 | [ApiResponseFor422](#get_function_logs.ApiResponseFor422) | Validation Error
+200 | [ApiResponseFor200](#execute_function.ApiResponseFor200) | Successful Response
+422 | [ApiResponseFor422](#execute_function.ApiResponseFor422) | Validation Error
 
-#### get_function_logs.ApiResponseFor200
+#### execute_function.ApiResponseFor200
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 response | urllib3.HTTPResponse | Raw response |
@@ -546,14 +424,9 @@ headers | Unset | headers were not defined |
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-list, tuple,  | tuple,  |  | 
+dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader,  | frozendict.frozendict, str, decimal.Decimal, BoolClass, NoneClass, tuple, bytes, FileIO |  | 
 
-### Tuple Items
-Class Name | Input Type | Accessed Type | Description | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-[**KappaLog**]({{complexTypePrefix}}KappaLog.md) | [**KappaLog**]({{complexTypePrefix}}KappaLog.md) | [**KappaLog**]({{complexTypePrefix}}KappaLog.md) |  | 
-
-#### get_function_logs.ApiResponseFor422
+#### execute_function.ApiResponseFor422
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 response | urllib3.HTTPResponse | Raw response |
@@ -569,195 +442,12 @@ Type | Description  | Notes
 ### Authorization
 
 [OAuth2PasswordBearer](../../../README.md#OAuth2PasswordBearer)
-
-[[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-
-# **get_me**
-<a name="get_me"></a>
-> User get_me()
-
-Get Me
-
-### Example
-
-* OAuth Authentication (OAuth2PasswordBearer):
-```python
-import kappa_client
-from kappa_client.apis.tags import default_api
-from kappa_client.model.user import User
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = kappa_client.Configuration(
-    host = "http://localhost"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-# Configure OAuth2 access token for authorization: OAuth2PasswordBearer
-configuration = kappa_client.Configuration(
-    host = "http://localhost",
-    access_token = 'YOUR_ACCESS_TOKEN'
-)
-# Enter a context with an instance of the API client
-with kappa_client.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = default_api.DefaultApi(api_client)
-
-    # example, this endpoint has no required or optional parameters
-    try:
-        # Get Me
-        api_response = api_instance.get_me()
-        pprint(api_response)
-    except kappa_client.ApiException as e:
-        print("Exception when calling DefaultApi->get_me: %s\n" % e)
-```
-### Parameters
-This endpoint does not need any parameter.
-
-### Return Types, Responses
-
-Code | Class | Description
-------------- | ------------- | -------------
-n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
-200 | [ApiResponseFor200](#get_me.ApiResponseFor200) | Successful Response
-
-#### get_me.ApiResponseFor200
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-response | urllib3.HTTPResponse | Raw response |
-body | typing.Union[SchemaFor200ResponseBodyApplicationJson, ] |  |
-headers | Unset | headers were not defined |
-
-# SchemaFor200ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**User**](../../models/User.md) |  | 
-
-
-### Authorization
-
-[OAuth2PasswordBearer](../../../README.md#OAuth2PasswordBearer)
-
-[[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
-
-# **log_function_execution**
-<a name="log_function_execution"></a>
-> Status log_function_execution(fn_idexec_id)
-
-Log Function Execution
-
-### Example
-
-```python
-import kappa_client
-from kappa_client.apis.tags import default_api
-from kappa_client.model.http_validation_error import HTTPValidationError
-from kappa_client.model.status import Status
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = kappa_client.Configuration(
-    host = "http://localhost"
-)
-
-# Enter a context with an instance of the API client
-with kappa_client.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = default_api.DefaultApi(api_client)
-
-    # example passing only required values which don't have defaults set
-    path_params = {
-        'fn_id': 1,
-        'exec_id': "exec_id_example",
-    }
-    try:
-        # Log Function Execution
-        api_response = api_instance.log_function_execution(
-            path_params=path_params,
-        )
-        pprint(api_response)
-    except kappa_client.ApiException as e:
-        print("Exception when calling DefaultApi->log_function_execution: %s\n" % e)
-```
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-path_params | RequestPathParams | |
-accept_content_types | typing.Tuple[str] | default is ('application/json', ) | Tells the server the content type(s) that are accepted by the client
-stream | bool | default is False | if True then the response.content will be streamed and loaded from a file like object. When downloading a file, set this to True to force the code to deserialize the content to a FileSchema file
-timeout | typing.Optional[typing.Union[int, typing.Tuple]] | default is None | the timeout used by the rest client
-skip_deserialization | bool | default is False | when True, headers and body will be unset and an instance of api_client.ApiResponseWithoutDeserialization will be returned
-
-### path_params
-#### RequestPathParams
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-fn_id | FnIdSchema | | 
-exec_id | ExecIdSchema | | 
-
-# FnIdSchema
-
-## Model Type Info
-Input Type | Accessed Type | Description | Notes
------------- | ------------- | ------------- | -------------
-decimal.Decimal, int,  | decimal.Decimal,  |  | 
-
-# ExecIdSchema
-
-## Model Type Info
-Input Type | Accessed Type | Description | Notes
------------- | ------------- | ------------- | -------------
-str,  | str,  |  | 
-
-### Return Types, Responses
-
-Code | Class | Description
-------------- | ------------- | -------------
-n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
-200 | [ApiResponseFor200](#log_function_execution.ApiResponseFor200) | Successful Response
-422 | [ApiResponseFor422](#log_function_execution.ApiResponseFor422) | Validation Error
-
-#### log_function_execution.ApiResponseFor200
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-response | urllib3.HTTPResponse | Raw response |
-body | typing.Union[SchemaFor200ResponseBodyApplicationJson, ] |  |
-headers | Unset | headers were not defined |
-
-# SchemaFor200ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**Status**](../../models/Status.md) |  | 
-
-
-#### log_function_execution.ApiResponseFor422
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-response | urllib3.HTTPResponse | Raw response |
-body | typing.Union[SchemaFor422ResponseBodyApplicationJson, ] |  |
-headers | Unset | headers were not defined |
-
-# SchemaFor422ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**HTTPValidationError**](../../models/HTTPValidationError.md) |  | 
-
-
-### Authorization
-
-No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **login**
 <a name="login"></a>
-> SuccessfulLogin login(login_user)
+> bool, date, datetime, dict, float, int, list, str, none_type login(login_user)
 
 Login
 
@@ -766,7 +456,6 @@ Login
 ```python
 import kappa_client
 from kappa_client.apis.tags import default_api
-from kappa_client.model.successful_login import SuccessfulLogin
 from kappa_client.model.http_validation_error import HTTPValidationError
 from kappa_client.model.login_user import LoginUser
 from pprint import pprint
@@ -782,6 +471,8 @@ with kappa_client.ApiClient(configuration) as api_client:
     api_instance = default_api.DefaultApi(api_client)
 
     # example passing only required values which don't have defaults set
+    query_params = {
+    }
     body = LoginUser(
         username="username_example",
         password="password_example",
@@ -789,6 +480,26 @@ with kappa_client.ApiClient(configuration) as api_client:
     try:
         # Login
         api_response = api_instance.login(
+            query_params=query_params,
+            body=body,
+        )
+        pprint(api_response)
+    except kappa_client.ApiException as e:
+        print("Exception when calling DefaultApi->login: %s\n" % e)
+
+    # example passing only optional values
+    query_params = {
+        'header_name': "header_name_example",
+        'header_value': "header_value_example",
+    }
+    body = LoginUser(
+        username="username_example",
+        password="password_example",
+    )
+    try:
+        # Login
+        api_response = api_instance.login(
+            query_params=query_params,
             body=body,
         )
         pprint(api_response)
@@ -800,6 +511,7 @@ with kappa_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 body | typing.Union[SchemaForRequestBodyApplicationJson] | required |
+query_params | RequestQueryParams | |
 content_type | str | optional, default is 'application/json' | Selects the schema and serialization of the request body
 accept_content_types | typing.Tuple[str] | default is ('application/json', ) | Tells the server the content type(s) that are accepted by the client
 stream | bool | default is False | if True then the response.content will be streamed and loaded from a file like object. When downloading a file, set this to True to force the code to deserialize the content to a FileSchema file
@@ -813,6 +525,29 @@ Type | Description  | Notes
 ------------- | ------------- | -------------
 [**LoginUser**](../../models/LoginUser.md) |  | 
 
+
+### query_params
+#### RequestQueryParams
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+header_name | HeaderNameSchema | | optional
+header_value | HeaderValueSchema | | optional
+
+
+# HeaderNameSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# HeaderValueSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 ### Return Types, Responses
 
@@ -830,10 +565,11 @@ body | typing.Union[SchemaFor200ResponseBodyApplicationJson, ] |  |
 headers | Unset | headers were not defined |
 
 # SchemaFor200ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**SuccessfulLogin**](../../models/SuccessfulLogin.md) |  | 
 
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader,  | frozendict.frozendict, str, decimal.Decimal, BoolClass, NoneClass, tuple, bytes, FileIO |  | 
 
 #### login.ApiResponseFor422
 Name | Type | Description  | Notes
@@ -856,7 +592,7 @@ No authorization required
 
 # **signup**
 <a name="signup"></a>
-> Status signup(login_user)
+> bool, date, datetime, dict, float, int, list, str, none_type signup(login_user)
 
 Signup
 
@@ -867,7 +603,6 @@ import kappa_client
 from kappa_client.apis.tags import default_api
 from kappa_client.model.http_validation_error import HTTPValidationError
 from kappa_client.model.login_user import LoginUser
-from kappa_client.model.status import Status
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -881,6 +616,8 @@ with kappa_client.ApiClient(configuration) as api_client:
     api_instance = default_api.DefaultApi(api_client)
 
     # example passing only required values which don't have defaults set
+    query_params = {
+    }
     body = LoginUser(
         username="username_example",
         password="password_example",
@@ -888,6 +625,26 @@ with kappa_client.ApiClient(configuration) as api_client:
     try:
         # Signup
         api_response = api_instance.signup(
+            query_params=query_params,
+            body=body,
+        )
+        pprint(api_response)
+    except kappa_client.ApiException as e:
+        print("Exception when calling DefaultApi->signup: %s\n" % e)
+
+    # example passing only optional values
+    query_params = {
+        'header_name': "header_name_example",
+        'header_value': "header_value_example",
+    }
+    body = LoginUser(
+        username="username_example",
+        password="password_example",
+    )
+    try:
+        # Signup
+        api_response = api_instance.signup(
+            query_params=query_params,
             body=body,
         )
         pprint(api_response)
@@ -899,6 +656,7 @@ with kappa_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 body | typing.Union[SchemaForRequestBodyApplicationJson] | required |
+query_params | RequestQueryParams | |
 content_type | str | optional, default is 'application/json' | Selects the schema and serialization of the request body
 accept_content_types | typing.Tuple[str] | default is ('application/json', ) | Tells the server the content type(s) that are accepted by the client
 stream | bool | default is False | if True then the response.content will be streamed and loaded from a file like object. When downloading a file, set this to True to force the code to deserialize the content to a FileSchema file
@@ -912,6 +670,29 @@ Type | Description  | Notes
 ------------- | ------------- | -------------
 [**LoginUser**](../../models/LoginUser.md) |  | 
 
+
+### query_params
+#### RequestQueryParams
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+header_name | HeaderNameSchema | | optional
+header_value | HeaderValueSchema | | optional
+
+
+# HeaderNameSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# HeaderValueSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 ### Return Types, Responses
 
@@ -929,10 +710,11 @@ body | typing.Union[SchemaFor200ResponseBodyApplicationJson, ] |  |
 headers | Unset | headers were not defined |
 
 # SchemaFor200ResponseBodyApplicationJson
-Type | Description  | Notes
-------------- | ------------- | -------------
-[**Status**](../../models/Status.md) |  | 
 
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader,  | frozendict.frozendict, str, decimal.Decimal, BoolClass, NoneClass, tuple, bytes, FileIO |  | 
 
 #### signup.ApiResponseFor422
 Name | Type | Description  | Notes

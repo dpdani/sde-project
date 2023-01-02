@@ -45,7 +45,7 @@ def get_password_hash(password):
 
 def authenticate_user(db, username: str, password: str) -> User | None:
     user = User.get(db, username)
-    if not user:
+    if user is None:
         return None
     if not verify_password(password, user.password):
         return None
