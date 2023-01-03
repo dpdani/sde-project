@@ -60,21 +60,21 @@ class KappaLog(SQLModel, table=True):
     log_id: int | None = Field(primary_key=True)
     time: datetime | None
     user: int | None
-    fn: str | None
+    fn: int | None
     content: str
 
     @classmethod
-    def add(cls, db: Session, user: int | None, fn: str | None, content: dict):
+    def add(cls, db: Session, user: int | None, fn: int | None, content: dict):
         return db.add(cls(
+            time=datetime.now(),
             user=user,
             fn=fn,
             content=json.dumps(content),
         ))
 
     @classmethod
-    def get_all(cls, db: Session, user: int, fn: str):
+    def get_all(cls, db: Session, fn: int):
         return db.exec(
             select(cls)
-            .where(cls.user == user)
             .where(cls.fn == fn)
         )

@@ -29,11 +29,11 @@ from kappa_logs_client.model.logs import Logs
 from kappa_logs_client.model.http_validation_error import HTTPValidationError
 
 # Path params
-FnIdSchema = schemas.StrSchema
+FnIdSchema = schemas.IntSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
     'RequestRequiredPathParams',
     {
-        'fn_id': typing.Union[FnIdSchema, str, ],
+        'fn_id': typing.Union[FnIdSchema, decimal.Decimal, int, ],
     }
 )
 RequestOptionalPathParams = typing_extensions.TypedDict(

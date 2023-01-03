@@ -1,8 +1,8 @@
-import subprocess
-
 import typer
+import uvicorn
 
-from kappa_data.config import config
+from . import app
+from .config import config
 
 
 cli = typer.Typer()
@@ -10,9 +10,12 @@ cli = typer.Typer()
 
 @cli.command()
 def start():
-    subprocess.call(
-        "uvicorn kappa_data.__init__:app "
-        f"--host {config.server.host} "
-        f"--port {config.server.port} ",
-        shell=True
+    return uvicorn.run(
+        app,
+        host=config.server.host,
+        port=config.server.port,
     )
+
+
+if __name__ == '__main__':
+    cli()

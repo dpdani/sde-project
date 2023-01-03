@@ -1,3 +1,4 @@
+import inspect
 import io
 import sys
 from contextlib import contextmanager
@@ -24,25 +25,9 @@ class InvalidCode(Exception):
     pass
 
 
-def load_function(fn_id: int, code: str):
-    if fn_id in loaded_functions:
-        raise FunctionLoaded
-    mod = ModuleType(f'fn_{fn_id}')
-    try:
-        exec(code, mod.__dict__)
-    except:
-        raise InvalidCode
-    if not hasattr(mod, "main"):
-        raise NoMainException
-    if not callable(mod.main):
-        raise NoMainException
-    loaded_functions[fn_id] = mod
-
-
-def unload_function(fn_id: int):
-    if fn_id not in loaded_functions:
-        raise FunctionNotLoaded
-    del loaded_functions[fn_id]
+@dataclass
+class InvalidArgument(Exception):
+    arg: str
 
 
 @dataclass
@@ -66,11 +51,42 @@ def capture():
     sys.stdout, sys.stderr = real_stdout, real_stderr
 
 
-def execute_function(fn_id: int, arguments: dict) -> RunnerExecution:
+def load_function(fn_id: int, code: str):
+    if fn_id in loaded_functions:
+        raise FunctionLoaded
+    mod = ModuleType(f'fn_{fn_id}')
+    with capture():
+        try:
+            exec(code, mod.__dict__)
+        except:
+            raise InvalidCode
+    if not hasattr(mod, "main"):
+        raise NoMainException
+    if not callable(mod.main):
+        raise NoMainException
+    if len(inspect.getfullargspec(mod.main).args) > 0:
+        raise InvalidCode
+    loaded_functions[fn_id] = mod
+
+
+def unload_function(fn_id: int):
     if fn_id not in loaded_functions:
         raise FunctionNotLoaded
+    del loaded_functions[fn_id]
+
+
+def execute_function(fn_id: int, arguments: dict) -> RunnerExecution:
+    fn = loaded_functions.get(fn_id, None)
+    if fn is None:
+        raise FunctionNotLoaded
+    acceptable_args = inspect.getfullargspec(fn.main).kwonlyargs
+    for arg in arguments.keys():
+        if arg not in acceptable_args:
+            raise InvalidArgument(arg=arg)
+    if len(acceptable_args) > len(arguments):
+        raise InvalidArgument(arg="too few arguments")
     with capture() as capt:
-        output = loaded_functions[fn_id].main(**arguments)
+        output = fn.main(**arguments)
         return RunnerExecution(
             output=output,
             capture=capt,

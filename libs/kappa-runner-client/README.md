@@ -141,6 +141,7 @@ import time
 import kappa_runner_client
 from pprint import pprint
 from kappa_runner_client.apis.tags import default_api
+from kappa_runner_client.model.execution import Execution
 from kappa_runner_client.model.function_to_load import FunctionToLoad
 from kappa_runner_client.model.http_validation_error import HTTPValidationError
 from kappa_runner_client.model.loaded_function import LoadedFunction
@@ -156,10 +157,13 @@ with kappa_runner_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     fn_id = 1 # int | 
+params = dict(
+        "key": "key_example",
+    ) # {str: (str,)} |  (optional)
 
     try:
         # Execute Function
-        api_response = api_instance.execute_function(fn_id)
+        api_response = api_instance.execute_function(fn_idparams=params)
         pprint(api_response)
     except kappa_runner_client.ApiException as e:
         print("Exception when calling DefaultApi->execute_function: %s\n" % e)
@@ -178,6 +182,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Execution](docs/models/Execution.md)
  - [FunctionToLoad](docs/models/FunctionToLoad.md)
  - [HTTPValidationError](docs/models/HTTPValidationError.md)
  - [LoadedFunction](docs/models/LoadedFunction.md)

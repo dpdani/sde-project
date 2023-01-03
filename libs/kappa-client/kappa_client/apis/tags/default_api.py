@@ -12,6 +12,8 @@
 from kappa_client.paths.functions_.post import CreateFunction
 from kappa_client.paths.functions_fn_name.delete import DeleteFunction
 from kappa_client.paths.functions_fn_name.get import ExecuteFunction
+from kappa_client.paths.functions_fn_name_logs_.get import GetFnLogs
+from kappa_client.paths.user_me.get import GetMe
 from kappa_client.paths.login_.post import Login
 from kappa_client.paths.signup_.post import Signup
 
@@ -20,6 +22,8 @@ class DefaultApi(
     CreateFunction,
     DeleteFunction,
     ExecuteFunction,
+    GetFnLogs,
+    GetMe,
     Login,
     Signup,
 ):

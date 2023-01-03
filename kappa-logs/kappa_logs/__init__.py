@@ -44,6 +44,19 @@ class Logs(BaseModel):
 
 
 @app.get("/functions/{fn_id}/", response_model=Logs)
-def get_fn_logs(fn_id: str, kappa_data: KappaDataApi = Depends(get_kappa_data),
+def get_fn_logs(fn_id: int, kappa_data: KappaDataApi = Depends(get_kappa_data),
                 kappa_fn_logs: KappaFnLogsApi = Depends(get_kappa_fn_logs)) -> Logs:
-    pass
+    data_logs: list[Log] = list(map(
+        lambda _: Log(
+            ts=_["time"],
+            content=_["content"],
+        ),
+        kappa_data.get_function_logs(path_params={"fn_id": fn_id}).body
+    ))
+    print(data_logs)
+    fn_logs: list[Log] = []  # todo
+    logs = [
+        *data_logs,
+        *fn_logs,
+    ]
+    return Logs(logs=sorted(logs, key=lambda _: _.ts))

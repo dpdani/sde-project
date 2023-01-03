@@ -8,7 +8,10 @@ docs/models/CreateFunction.md
 docs/models/CreatedFunction.md
 docs/models/GitHubResponse.md
 docs/models/HTTPValidationError.md
+docs/models/Log.md
+docs/models/LoggedInUser.md
 docs/models/LoginUser.md
+docs/models/Logs.md
 docs/models/ValidationError.md
 git_push.sh
 kappa_client/__init__.py
@@ -26,8 +29,14 @@ kappa_client/model/git_hub_response.py
 kappa_client/model/git_hub_response.pyi
 kappa_client/model/http_validation_error.py
 kappa_client/model/http_validation_error.pyi
+kappa_client/model/log.py
+kappa_client/model/log.pyi
+kappa_client/model/logged_in_user.py
+kappa_client/model/logged_in_user.pyi
 kappa_client/model/login_user.py
 kappa_client/model/login_user.pyi
+kappa_client/model/logs.py
+kappa_client/model/logs.pyi
 kappa_client/model/validation_error.py
 kappa_client/model/validation_error.pyi
 kappa_client/models/__init__.py
@@ -43,6 +52,9 @@ test/test_models/test_create_function.py
 test/test_models/test_created_function.py
 test/test_models/test_git_hub_response.py
 test/test_models/test_http_validation_error.py
+test/test_models/test_log.py
+test/test_models/test_logged_in_user.py
 test/test_models/test_login_user.py
+test/test_models/test_logs.py
 test/test_models/test_validation_error.py
 tox.ini

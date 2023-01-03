@@ -10,7 +10,7 @@ import kappa_fn_code_client
 import kappa_fn_code_client.apis.tags.default_api
 import kappa_fn_logs_client
 import kappa_fn_logs_client.apis.tags.default_api
-from kappa_fn_logs import CreateLog
+from kappa_fn_logs_client.model.create_log import CreateLog
 from kappa_runner import runner
 from kappa_runner.config import config
 
@@ -84,10 +84,26 @@ def is_function_loaded(fn_id: int):
 class Execution(BaseModel):
     fn_id: int
     exec_id: str
+    status: str
     output: dict
 
 
-@app.get("/functions/{fn_id}/")
+@app.get("/functions/{fn_id}/", response_model=Execution, openapi_extra={
+    "parameters": [  # specify presence of arbitrary query parameters
+        {
+            "in": "query",
+            "name": "params",
+            "schema": {
+                "type": "object",
+                "additionalProperties": {
+                    "type": "string",
+                }
+            },
+            "style": "form",
+            "explode": True,
+        }
+    ]
+})
 def execute_function(fn_id: int, request: Request, kappa_data: KappaDataApi = Depends(get_kappa_data),
                      kappa_fn_logs: KappaFnLogsApi = Depends(get_kappa_fn_logs)):
     if fn_id not in runner.loaded_functions:
@@ -97,7 +113,12 @@ def execute_function(fn_id: int, request: Request, kappa_data: KappaDataApi = De
         "fn_id": fn_id,
         "exec_id": exec_id,
     })
-    run = runner.execute_function(fn_id, arguments=dict(request.query_params))
+    try:
+        run = runner.execute_function(fn_id, arguments=dict(request.query_params))
+    except runner.InvalidArgument as e:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail={
+            "invalid_argument": e.arg,
+        })
     kappa_fn_logs.create_log(CreateLog(
         fn=fn_id,
         exec_id=exec_id,
@@ -107,7 +128,8 @@ def execute_function(fn_id: int, request: Request, kappa_data: KappaDataApi = De
     return Execution(
         fn_id=fn_id,
         exec_id=exec_id,
-        output=run.output,
+        status="executed",
+        output=run.output if run.output is not None else dict(),
     )
 
 

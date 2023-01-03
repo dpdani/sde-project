@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**delete_function**](#delete_function) | **delete** /functions/{fn_name}/ | Delete Function
 [**get_function**](#get_function) | **get** /functions/{fn_name}/ | Get Function
 [**get_function_by_id**](#get_function_by_id) | **get** /functions/id/{fn_id}/ | Get Function By Id
-[**get_function_logs**](#get_function_logs) | **get** /functions/{fn_name}/logs/ | Get Function Logs
+[**get_function_logs**](#get_function_logs) | **get** /functions/{fn_id}/logs/ | Get Function Logs
 [**get_me**](#get_me) | **get** /users/me/ | Get Me
 [**log_function_execution**](#log_function_execution) | **post** /functions/{fn_id}/logs/execution/{exec_id} | Log Function Execution
 [**login**](#login) | **post** /login/ | Login
@@ -455,13 +455,12 @@ No authorization required
 
 # **get_function_logs**
 <a name="get_function_logs"></a>
-> [KappaLog] get_function_logs(fn_name)
+> [KappaLog] get_function_logs(fn_id)
 
 Get Function Logs
 
 ### Example
 
-* OAuth Authentication (OAuth2PasswordBearer):
 ```python
 import kappa_data_client
 from kappa_data_client.apis.tags import default_api
@@ -474,16 +473,6 @@ configuration = kappa_data_client.Configuration(
     host = "http://localhost"
 )
 
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-# Configure OAuth2 access token for authorization: OAuth2PasswordBearer
-configuration = kappa_data_client.Configuration(
-    host = "http://localhost",
-    access_token = 'YOUR_ACCESS_TOKEN'
-)
 # Enter a context with an instance of the API client
 with kappa_data_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
@@ -491,7 +480,7 @@ with kappa_data_client.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
-        'fn_name': "fn_name_example",
+        'fn_id': 1,
     }
     try:
         # Get Function Logs
@@ -517,14 +506,14 @@ skip_deserialization | bool | default is False | when True, headers and body wil
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-fn_name | FnNameSchema | | 
+fn_id | FnIdSchema | | 
 
-# FnNameSchema
+# FnIdSchema
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-str,  | str,  |  | 
+decimal.Decimal, int,  | decimal.Decimal,  |  | 
 
 ### Return Types, Responses
 
@@ -568,7 +557,7 @@ Type | Description  | Notes
 
 ### Authorization
 
-[OAuth2PasswordBearer](../../../README.md#OAuth2PasswordBearer)
+No authorization required
 
 [[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 

@@ -8,5 +8,7 @@ import enum
 class PathValues(str, enum.Enum):
     SIGNUP_ = "/signup/"
     LOGIN_ = "/login/"
+    USER_ME = "/user/me"
     FUNCTIONS_ = "/functions/"
     FUNCTIONS_FN_NAME = "/functions/{fn_name}"
+    FUNCTIONS_FN_NAME_LOGS_ = "/functions/{fn_name}/logs/"

@@ -193,7 +193,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**delete_function**](docs/apis/tags/DefaultApi.md#delete_function) | **delete** /functions/{fn_name}/ | Delete Function
 *DefaultApi* | [**get_function**](docs/apis/tags/DefaultApi.md#get_function) | **get** /functions/{fn_name}/ | Get Function
 *DefaultApi* | [**get_function_by_id**](docs/apis/tags/DefaultApi.md#get_function_by_id) | **get** /functions/id/{fn_id}/ | Get Function By Id
-*DefaultApi* | [**get_function_logs**](docs/apis/tags/DefaultApi.md#get_function_logs) | **get** /functions/{fn_name}/logs/ | Get Function Logs
+*DefaultApi* | [**get_function_logs**](docs/apis/tags/DefaultApi.md#get_function_logs) | **get** /functions/{fn_id}/logs/ | Get Function Logs
 *DefaultApi* | [**get_me**](docs/apis/tags/DefaultApi.md#get_me) | **get** /users/me/ | Get Me
 *DefaultApi* | [**log_function_execution**](docs/apis/tags/DefaultApi.md#log_function_execution) | **post** /functions/{fn_id}/logs/execution/{exec_id} | Log Function Execution
 *DefaultApi* | [**login**](docs/apis/tags/DefaultApi.md#login) | **post** /login/ | Login

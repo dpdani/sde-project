@@ -11,7 +11,7 @@ import typing_extensions
 import urllib3
 from urllib3._collections import HTTPHeaderDict
 
-from kappa_data_client import api_client, exceptions
+from kappa_client import api_client, exceptions
 from datetime import date, datetime  # noqa: F401
 import decimal  # noqa: F401
 import functools  # noqa: F401
@@ -23,10 +23,10 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from kappa_data_client import schemas  # noqa: F401
+from kappa_client import schemas  # noqa: F401
 
-from kappa_data_client.model.kappa_log import KappaLog
-from kappa_data_client.model.http_validation_error import HTTPValidationError
+from kappa_client.model.http_validation_error import HTTPValidationError
+from kappa_client.model.logs import Logs
 
 # Path params
 FnNameSchema = schemas.StrSchema
@@ -54,32 +54,7 @@ request_path_fn_name = api_client.PathParameter(
     schema=FnNameSchema,
     required=True,
 )
-
-
-class SchemaFor200ResponseBodyApplicationJson(
-    schemas.ListSchema
-):
-
-
-    class MetaOapg:
-        
-        @staticmethod
-        def items() -> typing.Type['KappaLog']:
-            return KappaLog
-
-    def __new__(
-        cls,
-        _arg: typing.Union[typing.Tuple['KappaLog'], typing.List['KappaLog']],
-        _configuration: typing.Optional[schemas.Configuration] = None,
-    ) -> 'SchemaFor200ResponseBodyApplicationJson':
-        return super().__new__(
-            cls,
-            _arg,
-            _configuration=_configuration,
-        )
-
-    def __getitem__(self, i: int) -> 'KappaLog':
-        return super().__getitem__(i)
+SchemaFor200ResponseBodyApplicationJson = Logs
 
 
 @dataclass
@@ -124,7 +99,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _get_function_logs_oapg(
+    def _get_fn_logs_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -136,7 +111,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _get_function_logs_oapg(
+    def _get_fn_logs_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -146,7 +121,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _get_function_logs_oapg(
+    def _get_fn_logs_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -158,7 +133,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _get_function_logs_oapg(
+    def _get_fn_logs_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -167,7 +142,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Get Function Logs
+        Get Fn Logs
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -222,11 +197,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetFunctionLogs(BaseApi):
+class GetFnLogs(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_function_logs(
+    def get_fn_logs(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -238,7 +213,7 @@ class GetFunctionLogs(BaseApi):
     ]: ...
 
     @typing.overload
-    def get_function_logs(
+    def get_fn_logs(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -248,7 +223,7 @@ class GetFunctionLogs(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get_function_logs(
+    def get_fn_logs(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -260,7 +235,7 @@ class GetFunctionLogs(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get_function_logs(
+    def get_fn_logs(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -268,7 +243,7 @@ class GetFunctionLogs(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_function_logs_oapg(
+        return self._get_fn_logs_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
@@ -323,7 +298,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_function_logs_oapg(
+        return self._get_fn_logs_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,

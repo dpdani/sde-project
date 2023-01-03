@@ -9,7 +9,6 @@ def read_conf_file(_: BaseSettings):
 
 class Database(BaseModel):
     url: str
-    password: str
     database: str
     collection: str
 

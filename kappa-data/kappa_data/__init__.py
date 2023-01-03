@@ -1,3 +1,4 @@
+import json
 from typing import Self
 
 from fastapi import Depends, FastAPI, HTTPException
@@ -96,7 +97,10 @@ def create_function(function: CreateFunction, user: User = Depends(get_current_u
 
 @app.get("/functions/{fn_name}/", response_model=Function)
 def get_function(fn_name: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return Function.get(db, owner=user.user_id, name=fn_name)
+    fn = Function.get(db, owner=user.user_id, name=fn_name)
+    if fn is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND)
+    return fn
 
 
 @app.get("/functions/id/{fn_id}/", response_model=Function)
@@ -104,18 +108,26 @@ def get_function_by_id(fn_id: int, db: Session = Depends(get_db)):
     return Function.get_by_id(db, fn_id)
 
 
-@app.get("/functions/{fn_name}/logs/", response_model=list[KappaLog])
-def get_function_logs(fn_name: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return KappaLog.get_all(db, user.user_id, fn_name)
+@app.get("/functions/{fn_id}/logs/", response_model=list[KappaLog])
+def get_function_logs(fn_id: int, db: Session = Depends(get_db)):
+    logs = KappaLog.get_all(db, fn_id).all()
+
+    def converter(_: KappaLog):
+        _.content = json.dumps(_.content)
+        return _
+
+    logs = list(map(converter, logs))
+    return logs
 
 
 @app.post("/functions/{fn_id}/logs/execution/{exec_id}", response_model=Status)
 def log_function_execution(fn_id: int, exec_id: str, db: Session = Depends(get_db)):
     fn = Function.get_by_id(db, fn_id)
     KappaLog.add(db, fn.owner, fn.fn_id, {
-        "execution": "started",
+        "status": "started",
         "exec_id": exec_id,
     })
+    db.commit()
     return Status.ok()
 
 

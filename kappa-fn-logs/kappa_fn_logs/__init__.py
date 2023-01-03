@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from pymongo import MongoClient
+from pymongo.errors import CollectionInvalid
 from starlette import status
 
 from .config import config
@@ -13,7 +14,13 @@ app = FastAPI(
     generate_unique_id_function=lambda route: f"{route.name}",
 )
 
-mongo = MongoClient(config.db.url, password=config.db.password)[config.db.database][config.db.collection]
+client = MongoClient(config.db.url)[config.db.database]
+try:
+    client.create_collection(config.db.collection)
+except CollectionInvalid:  # already exists
+    pass
+mongo = client.get_collection(config.db.collection)
+print(mongo)
 
 
 class CreateLog(BaseModel):
@@ -25,14 +32,17 @@ class CreateLog(BaseModel):
 
 @app.post("/logs/")
 def create_log(log: CreateLog):
-    doc_id = mongo.find_one({
+    doc = mongo.find_one({
         "fn": log.fn,
-    })["_id"]
-    if doc_id is None:
-        doc_id = mongo.insert_one({
+    })
+    if doc is None:
+        doc = mongo.insert_one({
             "fn": log.fn,
             "logs": [],
         })
+        doc_id = doc.inserted_id
+    else:
+        doc_id = doc["_id"]
     mongo.update_one({"_id": doc_id}, {
         "$push": {"logs": {
             "exec_id": log.exec_id,

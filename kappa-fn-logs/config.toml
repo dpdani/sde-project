@@ -1,6 +1,5 @@
 [db]
-url = "mongodb://kappafnlogs@mongo:27017"
-password = ""
+url = "mongodb://kappa:password@localhost:27017/"
 database = "kappa"
 collection = "logs"
 

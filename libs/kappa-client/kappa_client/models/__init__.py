@@ -15,5 +15,8 @@ from kappa_client.model.create_function import CreateFunction
 from kappa_client.model.created_function import CreatedFunction
 from kappa_client.model.git_hub_response import GitHubResponse
 from kappa_client.model.http_validation_error import HTTPValidationError
+from kappa_client.model.log import Log
+from kappa_client.model.logged_in_user import LoggedInUser
 from kappa_client.model.login_user import LoginUser
+from kappa_client.model.logs import Logs
 from kappa_client.model.validation_error import ValidationError

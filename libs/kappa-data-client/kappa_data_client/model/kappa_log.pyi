@@ -43,7 +43,7 @@ class KappaLog(
             log_id = schemas.IntSchema
             time = schemas.DateTimeSchema
             user = schemas.IntSchema
-            fn = schemas.StrSchema
+            fn = schemas.IntSchema
             __annotations__ = {
                 "content": content,
                 "log_id": log_id,
@@ -106,7 +106,7 @@ class KappaLog(
         log_id: typing.Union[MetaOapg.properties.log_id, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         time: typing.Union[MetaOapg.properties.time, str, datetime, schemas.Unset] = schemas.unset,
         user: typing.Union[MetaOapg.properties.user, decimal.Decimal, int, schemas.Unset] = schemas.unset,
-        fn: typing.Union[MetaOapg.properties.fn, str, schemas.Unset] = schemas.unset,
+        fn: typing.Union[MetaOapg.properties.fn, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'KappaLog':

@@ -50,6 +50,9 @@ services:
 
   mongo:
     image: mongo:6.0.3
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: kappa
+      MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - "27017:27017"
 

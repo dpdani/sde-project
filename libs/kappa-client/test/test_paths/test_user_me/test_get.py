@@ -11,17 +11,17 @@ from unittest.mock import patch
 
 import urllib3
 
-import kappa_data_client
-from kappa_data_client.paths.functions_fn_name_logs_ import get  # noqa: E501
-from kappa_data_client import configuration, schemas, api_client
+import kappa_client
+from kappa_client.paths.user_me import get  # noqa: E501
+from kappa_client import configuration, schemas, api_client
 
 from .. import ApiTestMixin
 
 
-class TestFunctionsFnNameLogs(ApiTestMixin, unittest.TestCase):
+class TestUserMe(ApiTestMixin, unittest.TestCase):
     """
-    FunctionsFnNameLogs unit test stubs
-        Get Function Logs  # noqa: E501
+    UserMe unit test stubs
+        Get Me  # noqa: E501
     """
     _configuration = configuration.Configuration()
 

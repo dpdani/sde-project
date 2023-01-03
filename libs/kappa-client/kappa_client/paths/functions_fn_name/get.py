@@ -30,8 +30,35 @@ from kappa_client.model.http_validation_error import HTTPValidationError
 from . import path
 
 # Query params
-HeaderNameSchema = schemas.StrSchema
-HeaderValueSchema = schemas.StrSchema
+
+
+class ParamsSchema(
+    schemas.DictSchema
+):
+
+
+    class MetaOapg:
+        additional_properties = schemas.StrSchema
+    
+    def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+        # dict_instance[name] accessor
+        return super().__getitem__(name)
+    
+    def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+        return super().get_item_oapg(name)
+
+    def __new__(
+        cls,
+        *_args: typing.Union[dict, frozendict.frozendict, ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+        **kwargs: typing.Union[MetaOapg.additional_properties, str, ],
+    ) -> 'ParamsSchema':
+        return super().__new__(
+            cls,
+            *_args,
+            _configuration=_configuration,
+            **kwargs,
+        )
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
@@ -40,8 +67,7 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'header_name': typing.Union[HeaderNameSchema, str, ],
-        'header_value': typing.Union[HeaderValueSchema, str, ],
+        'params': typing.Union[ParamsSchema, dict, frozendict.frozendict, ],
     },
     total=False
 )
@@ -51,16 +77,10 @@ class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams)
     pass
 
 
-request_query_header_name = api_client.QueryParameter(
-    name="header_name",
+request_query_params = api_client.QueryParameter(
+    name="params",
     style=api_client.ParameterStyle.FORM,
-    schema=HeaderNameSchema,
-    explode=True,
-)
-request_query_header_value = api_client.QueryParameter(
-    name="header_value",
-    style=api_client.ParameterStyle.FORM,
-    schema=HeaderValueSchema,
+    schema=ParamsSchema,
     explode=True,
 )
 # Path params
@@ -212,8 +232,7 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_header_name,
-            request_query_header_value,
+            request_query_params,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:

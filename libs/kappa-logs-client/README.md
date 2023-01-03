@@ -154,7 +154,7 @@ configuration = kappa_logs_client.Configuration(
 with kappa_logs_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
-    fn_id = "fn_id_example" # str | 
+    fn_id = 1 # int | 
 
     try:
         # Get Fn Logs

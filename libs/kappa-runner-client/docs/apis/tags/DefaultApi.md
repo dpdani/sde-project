@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 # **execute_function**
 <a name="execute_function"></a>
-> bool, date, datetime, dict, float, int, list, str, none_type execute_function(fn_id)
+> Execution execute_function(fn_id)
 
 Execute Function
 
@@ -21,6 +21,7 @@ Execute Function
 ```python
 import kappa_runner_client
 from kappa_runner_client.apis.tags import default_api
+from kappa_runner_client.model.execution import Execution
 from kappa_runner_client.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -38,10 +39,32 @@ with kappa_runner_client.ApiClient(configuration) as api_client:
     path_params = {
         'fn_id': 1,
     }
+    query_params = {
+    }
     try:
         # Execute Function
         api_response = api_instance.execute_function(
             path_params=path_params,
+            query_params=query_params,
+        )
+        pprint(api_response)
+    except kappa_runner_client.ApiException as e:
+        print("Exception when calling DefaultApi->execute_function: %s\n" % e)
+
+    # example passing only optional values
+    path_params = {
+        'fn_id': 1,
+    }
+    query_params = {
+        'params': dict(
+        "key": "key_example",
+    ),
+    }
+    try:
+        # Execute Function
+        api_response = api_instance.execute_function(
+            path_params=path_params,
+            query_params=query_params,
         )
         pprint(api_response)
     except kappa_runner_client.ApiException as e:
@@ -51,11 +74,32 @@ with kappa_runner_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+query_params | RequestQueryParams | |
 path_params | RequestPathParams | |
 accept_content_types | typing.Tuple[str] | default is ('application/json', ) | Tells the server the content type(s) that are accepted by the client
 stream | bool | default is False | if True then the response.content will be streamed and loaded from a file like object. When downloading a file, set this to True to force the code to deserialize the content to a FileSchema file
 timeout | typing.Optional[typing.Union[int, typing.Tuple]] | default is None | the timeout used by the rest client
 skip_deserialization | bool | default is False | when True, headers and body will be unset and an instance of api_client.ApiResponseWithoutDeserialization will be returned
+
+### query_params
+#### RequestQueryParams
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+params | ParamsSchema | | optional
+
+
+# ParamsSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+dict, frozendict.frozendict,  | frozendict.frozendict,  |  | 
+
+### Dictionary Keys
+Key | Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | ------------- | -------------
+**any_string_name** | str,  | str,  | any string name can be used but the value must be the correct type | [optional] 
 
 ### path_params
 #### RequestPathParams
@@ -87,11 +131,10 @@ body | typing.Union[SchemaFor200ResponseBodyApplicationJson, ] |  |
 headers | Unset | headers were not defined |
 
 # SchemaFor200ResponseBodyApplicationJson
+Type | Description  | Notes
+------------- | ------------- | -------------
+[**Execution**](../../models/Execution.md) |  | 
 
-## Model Type Info
-Input Type | Accessed Type | Description | Notes
------------- | ------------- | ------------- | -------------
-dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader,  | frozendict.frozendict, str, decimal.Decimal, BoolClass, NoneClass, tuple, bytes, FileIO |  | 
 
 #### execute_function.ApiResponseFor422
 Name | Type | Description  | Notes
@@ -278,7 +321,7 @@ Code | Class | Description
 ------------- | ------------- | -------------
 n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
 200 | [ApiResponseFor200](#load_function.ApiResponseFor200) | Successful Response
-406 | [ApiResponseFor406](#load_function.ApiResponseFor406) | Code not acceptable.
+406 | [ApiResponseFor406](#load_function.ApiResponseFor406) | Code not acceptable
 422 | [ApiResponseFor422](#load_function.ApiResponseFor422) | Validation Error
 
 #### load_function.ApiResponseFor200

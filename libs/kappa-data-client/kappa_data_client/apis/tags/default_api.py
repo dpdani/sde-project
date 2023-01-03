@@ -13,7 +13,7 @@ from kappa_data_client.paths.functions_.post import CreateFunction
 from kappa_data_client.paths.functions_fn_name_.delete import DeleteFunction
 from kappa_data_client.paths.functions_fn_name_.get import GetFunction
 from kappa_data_client.paths.functions_id_fn_id_.get import GetFunctionById
-from kappa_data_client.paths.functions_fn_name_logs_.get import GetFunctionLogs
+from kappa_data_client.paths.functions_fn_id_logs_.get import GetFunctionLogs
 from kappa_data_client.paths.users_me_.get import GetMe
 from kappa_data_client.paths.functions_fn_id_logs_execution_exec_id.post import LogFunctionExecution
 from kappa_data_client.paths.login_.post import Login

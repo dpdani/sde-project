@@ -15,4 +15,4 @@ runner = "http://localhost:8060"
 [github]
 base_url = "https://github.com"
 api_version = "2022-11-28"
-text = "You may also be intereseted in these open source projects"
+text = "You may also be intereseted in these open source projects:"

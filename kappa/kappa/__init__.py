@@ -1,7 +1,6 @@
 import json
 import time
 import uuid
-from pprint import pprint
 
 import requests
 from fastapi import Depends, FastAPI, HTTPException, Request
@@ -12,12 +11,15 @@ import kappa_data_client
 import kappa_data_client.apis.tags.default_api
 import kappa_fn_code_client
 import kappa_fn_code_client.apis.tags.default_api
+import kappa_logs_client
+import kappa_logs_client.apis.tags.default_api
 import kappa_runner_client
 import kappa_runner_client.apis.tags.default_api
 from kappa.config import config
 from kappa_data import LoginUser, User
 from kappa_data.security import credentials_exception, oauth2_scheme
 from kappa_data_client.model.create_function import CreateFunction as DataCreateFunction
+from kappa_logs import Logs
 from kappa_runner_client.model.function_to_load import FunctionToLoad
 
 
@@ -31,6 +33,7 @@ app = FastAPI(
 KappaDataApi = kappa_data_client.apis.tags.default_api.DefaultApi
 KappaCodeApi = kappa_fn_code_client.apis.tags.default_api.DefaultApi
 KappaRunnerApi = kappa_runner_client.apis.tags.default_api.DefaultApi
+KappaLogsApi = kappa_logs_client.apis.tags.default_api.DefaultApi
 
 
 def get_kappa_data(header_name: str | None = None, header_value: str | None = None):
@@ -57,6 +60,13 @@ def get_kappa_runner() -> KappaRunnerApi:
     with kappa_runner_client.ApiClient(conf) as api_client:
         kappa_runner = KappaRunnerApi(api_client)
         yield kappa_runner
+
+
+def get_kappa_logs() -> KappaLogsApi:
+    conf = kappa_logs_client.Configuration(config.kappa.logs)
+    with kappa_runner_client.ApiClient(conf) as api_client:
+        kappa_logs = KappaLogsApi(api_client)
+        yield kappa_logs
 
 
 def get_auth_kappa_data(token: str = Depends(oauth2_scheme)) -> KappaDataApi:
@@ -87,6 +97,15 @@ def login(user: LoginUser, kappa_data: KappaDataApi = Depends(get_kappa_data)):
         raise HTTPException(status_code=response.status, detail=response.body)
 
 
+class LoggedInUser(BaseModel):
+    username: str
+
+
+@app.get("/user/me", response_model=LoggedInUser)
+def get_me(user: User = Depends(get_current_user)):
+    return LoggedInUser(username=user.login)
+
+
 class CreateFunction(BaseModel):
     name: str
     code: str
@@ -108,7 +127,7 @@ class CreatedFunction(BaseModel):
         "description": "Code not acceptable"
     }
 })
-def create_function(create_fn: CreateFunction, user: User = Depends(get_current_user),
+def create_function(create_fn: CreateFunction,
                     kappa_data: KappaDataApi = Depends(get_auth_kappa_data),
                     kappa_code: KappaCodeApi = Depends(get_kappa_code),
                     kappa_runner: KappaRunnerApi = Depends(get_kappa_runner)):
@@ -140,41 +159,118 @@ def create_function(create_fn: CreateFunction, user: User = Depends(get_current_
         raise e
     while not kappa_runner.is_function_loaded(path_params={"fn_id": fn["fn_id"]}).body["loaded"]:
         time.sleep(0.01)
-    gh = requests.get(f"https://api.github.com/search/repositories?q={fn['name']}", headers={
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": config.github.api_version,
-    }).json()
+    try:
+        gh = requests.get(f"https://api.github.com/search/repositories?q={fn['name']}", headers={
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": config.github.api_version,
+        }).json()
+    except requests.ConnectionError:
+        gh = None
     return CreatedFunction(
         fn_name=create_fn.name,
         created=True,
         related=GitHubResponse(
             text=config.github.text,
             repos=list(map(lambda _: _["html_url"], gh["items"]))[:3],
+        ) if gh is not None else GitHubResponse(
+            text="Could not reach GitHub.com",
+            repos=[],
         )
     )
 
 
-@app.get("/functions/{fn_name}")
+class Execution(BaseModel):
+    fn: str
+    exec_id: str
+    status: str
+    output: dict
+
+
+@app.get("/functions/{fn_name}", openapi_extra={
+    "parameters": [  # specify presence of arbitrary query parameters
+        {
+            "in": "query",
+            "name": "params",
+            "schema": {
+                "type": "object",
+                "additionalProperties": {
+                    "type": "string",
+                }
+            },
+            "style": "form",
+            "explode": True,
+        }
+    ]
+})
 def execute_function(fn_name: str, request: Request, user: User = Depends(get_current_user),
-                     kappa_data: KappaDataApi = Depends(get_kappa_data),
+                     kappa_data: KappaDataApi = Depends(get_auth_kappa_data),
                      kappa_runner: KappaRunnerApi = Depends(get_kappa_runner)):
-    fn = kappa_data.get_function(path_params={"fn_name": fn_name}).body
-    return kappa_runner.execute_function(path_params={"fn_id": fn.fn_id},
-                                         query_params=request.query_params)
+    try:
+        fn = kappa_data.get_function(path_params={"fn_name": fn_name}).body
+    except kappa_data_client.ApiException as e:
+        match e.status:
+            case status.HTTP_404_NOT_FOUND:
+                raise HTTPException(status.HTTP_404_NOT_FOUND)
+            case _:
+                raise e
+    try:
+        exe = kappa_runner.execute_function(path_params={"fn_id": fn["fn_id"]},
+                                            query_params={"params": dict(request.query_params)}).body
+    except kappa_runner_client.ApiException as e:
+        match e.status:
+            case status.HTTP_400_BAD_REQUEST:
+                raise HTTPException(status.HTTP_400_BAD_REQUEST, detail=json.loads(e.body)["detail"])
+            case _:
+                raise e
+    return Execution(
+        fn=fn_name,
+        exec_id=exe["exec_id"],
+        status=exe["status"],
+        output=exe["output"],
+    )
 
 
 @app.delete("/functions/{fn_name}")
-def delete_function(fn_name: str, user: User = Depends(get_current_user),
-                    kappa_data: KappaDataApi = Depends(get_kappa_data),
+def delete_function(fn_name: str,
+                    kappa_data: KappaDataApi = Depends(get_auth_kappa_data),
                     kappa_code: KappaCodeApi = Depends(get_kappa_code),
                     kappa_runner: KappaRunnerApi = Depends(get_kappa_runner)):
-    fn = kappa_data.get_function(path_params={"fn_name": fn_name}).body
-    kappa_code.delete_code(path_params={
-        "code_id": fn.code_id,
-    })
+    try:
+        fn = kappa_data.get_function(path_params={"fn_name": fn_name}).body
+    except kappa_data_client.ApiException as e:
+        match e.status:
+            case status.HTTP_404_NOT_FOUND:
+                raise HTTPException(status.HTTP_404_NOT_FOUND)
+            case _:
+                raise e
+    try:
+        kappa_code.delete_code(path_params={
+            "code_id": fn["code_id"],
+        })
+    except kappa_fn_code_client.ApiException as e:
+        match e.status:
+            case status.HTTP_404_NOT_FOUND:
+                pass
+            case _:
+                raise e
     kappa_data.delete_function(path_params={
-        "fn_name": fn.name,
+        "fn_name": fn["name"],
     })
-    kappa_runner.unload_function(fn.fn_id)
-    while kappa_runner.is_function_loaded(fn.fn_id).body.loaded:
+    try:
+        kappa_runner.unload_function({"fn_id": fn["fn_id"]})
+    except kappa_runner_client.ApiException as e:
+        match e.status:
+            case status.HTTP_404_NOT_FOUND:
+                pass
+            case _:
+                raise e
+    while kappa_runner.is_function_loaded({"fn_id": fn["fn_id"]}).body["loaded"]:
         time.sleep(0.01)
+
+
+@app.get("/functions/{fn_name}/logs/", response_model=Logs)
+def get_fn_logs(fn_name: str, kappa_data: KappaDataApi = Depends(get_auth_kappa_data),
+                kappa_logs: KappaLogsApi = Depends(get_kappa_logs)):
+    fn = kappa_data.get_function(path_params={"fn_name": fn_name}).body
+    content = kappa_logs.get_fn_logs(path_params={"fn_id": fn["fn_id"]}, skip_deserialization=True).response.data
+    return Logs.parse_raw(content)

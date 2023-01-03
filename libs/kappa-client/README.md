@@ -144,7 +144,9 @@ from kappa_client.apis.tags import default_api
 from kappa_client.model.create_function import CreateFunction
 from kappa_client.model.created_function import CreatedFunction
 from kappa_client.model.http_validation_error import HTTPValidationError
+from kappa_client.model.logged_in_user import LoggedInUser
 from kappa_client.model.login_user import LoginUser
+from kappa_client.model.logs import Logs
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = kappa_client.Configuration(
@@ -188,6 +190,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**create_function**](docs/apis/tags/DefaultApi.md#create_function) | **post** /functions/ | Create Function
 *DefaultApi* | [**delete_function**](docs/apis/tags/DefaultApi.md#delete_function) | **delete** /functions/{fn_name} | Delete Function
 *DefaultApi* | [**execute_function**](docs/apis/tags/DefaultApi.md#execute_function) | **get** /functions/{fn_name} | Execute Function
+*DefaultApi* | [**get_fn_logs**](docs/apis/tags/DefaultApi.md#get_fn_logs) | **get** /functions/{fn_name}/logs/ | Get Fn Logs
+*DefaultApi* | [**get_me**](docs/apis/tags/DefaultApi.md#get_me) | **get** /user/me | Get Me
 *DefaultApi* | [**login**](docs/apis/tags/DefaultApi.md#login) | **post** /login/ | Login
 *DefaultApi* | [**signup**](docs/apis/tags/DefaultApi.md#signup) | **post** /signup/ | Signup
 
@@ -197,7 +201,10 @@ Class | Method | HTTP request | Description
  - [CreatedFunction](docs/models/CreatedFunction.md)
  - [GitHubResponse](docs/models/GitHubResponse.md)
  - [HTTPValidationError](docs/models/HTTPValidationError.md)
+ - [Log](docs/models/Log.md)
+ - [LoggedInUser](docs/models/LoggedInUser.md)
  - [LoginUser](docs/models/LoginUser.md)
+ - [Logs](docs/models/Logs.md)
  - [ValidationError](docs/models/ValidationError.md)
 
 ## Documentation For Authorization

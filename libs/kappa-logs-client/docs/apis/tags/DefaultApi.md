@@ -34,7 +34,7 @@ with kappa_logs_client.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
-        'fn_id': "fn_id_example",
+        'fn_id': 1,
     }
     try:
         # Get Fn Logs
@@ -67,7 +67,7 @@ fn_id | FnIdSchema | |
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-str,  | str,  |  | 
+decimal.Decimal, int,  | decimal.Decimal,  |  | 
 
 ### Return Types, Responses
 
