@@ -141,6 +141,7 @@ import time
 import kappa_client
 from pprint import pprint
 from kappa_client.apis.tags import default_api
+from kappa_client.model.bill import Bill
 from kappa_client.model.create_function import CreateFunction
 from kappa_client.model.created_function import CreatedFunction
 from kappa_client.model.http_validation_error import HTTPValidationError
@@ -190,6 +191,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**create_function**](docs/apis/tags/DefaultApi.md#create_function) | **post** /functions/ | Create Function
 *DefaultApi* | [**delete_function**](docs/apis/tags/DefaultApi.md#delete_function) | **delete** /functions/{fn_name} | Delete Function
 *DefaultApi* | [**execute_function**](docs/apis/tags/DefaultApi.md#execute_function) | **get** /functions/{fn_name} | Execute Function
+*DefaultApi* | [**get_bill**](docs/apis/tags/DefaultApi.md#get_bill) | **get** /bill/ | Get Bill
+*DefaultApi* | [**get_exec_logs**](docs/apis/tags/DefaultApi.md#get_exec_logs) | **get** /functions/exec/{exec_id}/logs/ | Get Exec Logs
 *DefaultApi* | [**get_fn_logs**](docs/apis/tags/DefaultApi.md#get_fn_logs) | **get** /functions/{fn_name}/logs/ | Get Fn Logs
 *DefaultApi* | [**get_me**](docs/apis/tags/DefaultApi.md#get_me) | **get** /user/me | Get Me
 *DefaultApi* | [**login**](docs/apis/tags/DefaultApi.md#login) | **post** /login/ | Login
@@ -197,6 +200,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Bill](docs/models/Bill.md)
  - [CreateFunction](docs/models/CreateFunction.md)
  - [CreatedFunction](docs/models/CreatedFunction.md)
  - [GitHubResponse](docs/models/GitHubResponse.md)

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from pymongo import MongoClient
@@ -20,7 +22,6 @@ try:
 except CollectionInvalid:  # already exists
     pass
 mongo = client.get_collection(config.db.collection)
-print(mongo)
 
 
 class CreateLog(BaseModel):
@@ -48,8 +49,21 @@ def create_log(log: CreateLog):
             "exec_id": log.exec_id,
             "stdout": log.stdout,
             "stderr": log.stderr,
+            "ts": datetime.utcnow(),
         }}
     })
+
+
+class FnLog(BaseModel):
+    exec_id: str
+    stdout: str
+    stderr: str
+    ts: datetime
+
+
+class FnLogs(BaseModel):
+    fn: int
+    logs: list[FnLog]
 
 
 @app.get("/logs/{fn}/")
@@ -59,4 +73,21 @@ def get_logs(fn: int):
     })
     if doc is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND)
-    return doc
+    return FnLogs.parse_obj({
+        "fn": doc["fn"],
+        "logs": doc["logs"],
+    })
+
+
+@app.get("/logs/exec/{exec_id}/")
+def get_exec_logs(exec_id: str):
+    doc = mongo.find_one({
+        "logs.exec_id": exec_id,
+    })
+    if doc is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND)
+    print(doc)
+    return FnLogs.parse_obj({
+        "fn": doc["fn"],
+        "logs": list(filter(lambda _: _["exec_id"] == exec_id, doc["logs"])),
+    })

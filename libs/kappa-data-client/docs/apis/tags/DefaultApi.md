@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**bill**](#bill) | **get** /bill/ | Bill
 [**create_function**](#create_function) | **post** /functions/ | Create Function
 [**delete_function**](#delete_function) | **delete** /functions/{fn_name}/ | Delete Function
 [**get_function**](#get_function) | **get** /functions/{fn_name}/ | Get Function
@@ -14,6 +15,78 @@ Method | HTTP request | Description
 [**log_function_execution**](#log_function_execution) | **post** /functions/{fn_id}/logs/execution/{exec_id} | Log Function Execution
 [**login**](#login) | **post** /login/ | Login
 [**signup**](#signup) | **post** /signup/ | Signup
+
+# **bill**
+<a name="bill"></a>
+> Bill bill()
+
+Bill
+
+### Example
+
+* OAuth Authentication (OAuth2PasswordBearer):
+```python
+import kappa_data_client
+from kappa_data_client.apis.tags import default_api
+from kappa_data_client.model.bill import Bill
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = kappa_data_client.Configuration(
+    host = "http://localhost"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure OAuth2 access token for authorization: OAuth2PasswordBearer
+configuration = kappa_data_client.Configuration(
+    host = "http://localhost",
+    access_token = 'YOUR_ACCESS_TOKEN'
+)
+# Enter a context with an instance of the API client
+with kappa_data_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = default_api.DefaultApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Bill
+        api_response = api_instance.bill()
+        pprint(api_response)
+    except kappa_data_client.ApiException as e:
+        print("Exception when calling DefaultApi->bill: %s\n" % e)
+```
+### Parameters
+This endpoint does not need any parameter.
+
+### Return Types, Responses
+
+Code | Class | Description
+------------- | ------------- | -------------
+n/a | api_client.ApiResponseWithoutDeserialization | When skip_deserialization is True this response is returned
+200 | [ApiResponseFor200](#bill.ApiResponseFor200) | Successful Response
+
+#### bill.ApiResponseFor200
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+response | urllib3.HTTPResponse | Raw response |
+body | typing.Union[SchemaFor200ResponseBodyApplicationJson, ] |  |
+headers | Unset | headers were not defined |
+
+# SchemaFor200ResponseBodyApplicationJson
+Type | Description  | Notes
+------------- | ------------- | -------------
+[**Bill**](../../models/Bill.md) |  | 
+
+
+### Authorization
+
+[OAuth2PasswordBearer](../../../README.md#OAuth2PasswordBearer)
+
+[[Back to top]](#__pageTop) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **create_function**
 <a name="create_function"></a>

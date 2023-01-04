@@ -7,3 +7,4 @@ import enum
 
 class PathValues(str, enum.Enum):
     FUNCTIONS_FN_ID_ = "/functions/{fn_id}/"
+    FUNCTIONS_EXEC_EXEC_ID_LOGS_ = "/functions/exec/{exec_id}/logs/"

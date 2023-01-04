@@ -4,6 +4,7 @@
 .travis.yml
 README.md
 docs/apis/tags/DefaultApi.md
+docs/models/Bill.md
 docs/models/CreateFunction.md
 docs/models/Function.md
 docs/models/HTTPValidationError.md
@@ -21,6 +22,8 @@ kappa_data_client/apis/tags/default_api.py
 kappa_data_client/configuration.py
 kappa_data_client/exceptions.py
 kappa_data_client/model/__init__.py
+kappa_data_client/model/bill.py
+kappa_data_client/model/bill.pyi
 kappa_data_client/model/create_function.py
 kappa_data_client/model/create_function.pyi
 kappa_data_client/model/function.py
@@ -48,6 +51,7 @@ setup.py
 test-requirements.txt
 test/__init__.py
 test/test_models/__init__.py
+test/test_models/test_bill.py
 test/test_models/test_create_function.py
 test/test_models/test_function.py
 test/test_models/test_http_validation_error.py

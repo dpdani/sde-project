@@ -1,4 +1,5 @@
-from datetime import datetime
+import json
+import datetime
 
 from fastapi import Depends, FastAPI
 from pydantic import BaseModel
@@ -36,11 +37,29 @@ def get_kappa_fn_logs() -> KappaFnLogsApi:
 
 
 class Log(BaseModel):
-    ts: datetime
+    ts: datetime.datetime
     content: str
+
 
 class Logs(BaseModel):
     logs: list[Log]
+
+
+def process_fn_logs(fn_logs) -> list[Log]:
+    fn_logs: list[Log] = list(map(
+        lambda _: Log(
+            ts=_["ts"],
+            content=json.dumps({
+                "exec_id": _["exec_id"],
+                "stdout": _["stdout"],
+                "stderr": _["stderr"],
+            }),
+        ),
+        fn_logs
+    ))
+    for log in fn_logs:
+        log.ts = log.ts.replace(tzinfo=datetime.timezone.utc, hour=log.ts.hour + 1)
+    return fn_logs
 
 
 @app.get("/functions/{fn_id}/", response_model=Logs)
@@ -54,9 +73,18 @@ def get_fn_logs(fn_id: int, kappa_data: KappaDataApi = Depends(get_kappa_data),
         kappa_data.get_function_logs(path_params={"fn_id": fn_id}).body
     ))
     print(data_logs)
-    fn_logs: list[Log] = []  # todo
+    fn_logs = process_fn_logs(kappa_fn_logs.get_logs(path_params={"fn": fn_id}).body["logs"])
+    print(fn_logs)
     logs = [
         *data_logs,
         *fn_logs,
     ]
+    return Logs(logs=sorted(logs, key=lambda _: _.ts))
+
+
+@app.get("/functions/exec/{exec_id}/logs/", response_model=Logs)
+def get_exec_logs(exec_id: str, kappa_fn_logs: KappaFnLogsApi = Depends(get_kappa_fn_logs)):
+    logs = process_fn_logs(
+        kappa_fn_logs.get_exec_logs(path_params={"exec_id": exec_id}).body["logs"]
+    )
     return Logs(logs=sorted(logs, key=lambda _: _.ts))

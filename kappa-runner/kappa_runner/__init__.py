@@ -109,7 +109,7 @@ def execute_function(fn_id: int, request: Request, kappa_data: KappaDataApi = De
     if fn_id not in runner.loaded_functions:
         raise HTTPException(status.HTTP_404_NOT_FOUND)
     exec_id = str(uuid.uuid4())
-    kappa_data.log_function_execution(path_params={
+    kappa_data.log_function_execution(path_params={  # log execution for billing
         "fn_id": fn_id,
         "exec_id": exec_id,
     })

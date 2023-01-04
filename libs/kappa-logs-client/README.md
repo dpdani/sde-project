@@ -154,14 +154,14 @@ configuration = kappa_logs_client.Configuration(
 with kappa_logs_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
-    fn_id = 1 # int | 
+    exec_id = "exec_id_example" # str | 
 
     try:
-        # Get Fn Logs
-        api_response = api_instance.get_fn_logs(fn_id)
+        # Get Exec Logs
+        api_response = api_instance.get_exec_logs(exec_id)
         pprint(api_response)
     except kappa_logs_client.ApiException as e:
-        print("Exception when calling DefaultApi->get_fn_logs: %s\n" % e)
+        print("Exception when calling DefaultApi->get_exec_logs: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -170,6 +170,7 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**get_exec_logs**](docs/apis/tags/DefaultApi.md#get_exec_logs) | **get** /functions/exec/{exec_id}/logs/ | Get Exec Logs
 *DefaultApi* | [**get_fn_logs**](docs/apis/tags/DefaultApi.md#get_fn_logs) | **get** /functions/{fn_id}/ | Get Fn Logs
 
 ## Documentation For Models

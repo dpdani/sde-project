@@ -4,7 +4,7 @@ from typing import Self
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.exc import IntegrityError
-from sqlmodel import Session
+from sqlmodel import Session, select
 from starlette import status
 
 from kappa_data.models import Function, KappaLog, User, get_db
@@ -139,3 +139,32 @@ def delete_function(fn_name: str, user: User = Depends(get_current_user), db: Se
     db.delete(fn)
     db.commit()
     return Status(status="deleted")
+
+
+class Bill(BaseModel):
+    total: int
+    fn: dict[str, int]
+
+
+@app.get("/bill/", response_model=Bill)
+def bill(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    logs = db.exec(
+        select(KappaLog)
+        .where(KappaLog.user == user.user_id)
+    ).all()
+    functions = db.exec(
+        select(Function)
+        .where(Function.owner == user.user_id)
+    ).all()
+    get_fn_name = lambda fn_id: next(filter(lambda _: _.fn_id == fn_id, functions)).name
+    counter = {}
+    for fn in functions:
+        counter[fn.fn_id] = 0
+    for log in logs:
+        if "exec_id" in log.content and "status" in log.content and log.content["status"] == "started":
+            counter[log.fn] += 1
+    counter = {
+        get_fn_name(fn_id): counter[fn_id]
+        for fn_id in counter
+    }
+    return Bill(total=sum(counter.values()), fn=counter)

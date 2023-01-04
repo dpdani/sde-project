@@ -11,6 +11,7 @@
 # import sys
 # sys.setrecursionlimit(n)
 
+from kappa_data_client.model.bill import Bill
 from kappa_data_client.model.create_function import CreateFunction
 from kappa_data_client.model.function import Function
 from kappa_data_client.model.http_validation_error import HTTPValidationError

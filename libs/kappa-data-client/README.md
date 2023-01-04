@@ -141,6 +141,7 @@ import time
 import kappa_data_client
 from pprint import pprint
 from kappa_data_client.apis.tags import default_api
+from kappa_data_client.model.bill import Bill
 from kappa_data_client.model.create_function import CreateFunction
 from kappa_data_client.model.function import Function
 from kappa_data_client.model.http_validation_error import HTTPValidationError
@@ -170,17 +171,13 @@ configuration = kappa_data_client.Configuration(
 with kappa_data_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
-    create_function = CreateFunction(
-        name="name_example",
-        code_id="code_id_example",
-    ) # CreateFunction | 
-
+    
     try:
-        # Create Function
-        api_response = api_instance.create_function(create_function)
+        # Bill
+        api_response = api_instance.bill()
         pprint(api_response)
     except kappa_data_client.ApiException as e:
-        print("Exception when calling DefaultApi->create_function: %s\n" % e)
+        print("Exception when calling DefaultApi->bill: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -189,6 +186,7 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**bill**](docs/apis/tags/DefaultApi.md#bill) | **get** /bill/ | Bill
 *DefaultApi* | [**create_function**](docs/apis/tags/DefaultApi.md#create_function) | **post** /functions/ | Create Function
 *DefaultApi* | [**delete_function**](docs/apis/tags/DefaultApi.md#delete_function) | **delete** /functions/{fn_name}/ | Delete Function
 *DefaultApi* | [**get_function**](docs/apis/tags/DefaultApi.md#get_function) | **get** /functions/{fn_name}/ | Get Function
@@ -201,6 +199,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Bill](docs/models/Bill.md)
  - [CreateFunction](docs/models/CreateFunction.md)
  - [Function](docs/models/Function.md)
  - [HTTPValidationError](docs/models/HTTPValidationError.md)

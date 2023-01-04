@@ -9,6 +9,7 @@ from kappa_data_client.apis.paths.functions_fn_name_ import FunctionsFnName
 from kappa_data_client.apis.paths.functions_id_fn_id_ import FunctionsIdFnId
 from kappa_data_client.apis.paths.functions_fn_id_logs_ import FunctionsFnIdLogs
 from kappa_data_client.apis.paths.functions_fn_id_logs_execution_exec_id import FunctionsFnIdLogsExecutionExecId
+from kappa_data_client.apis.paths.bill_ import Bill
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi',
@@ -21,6 +22,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.FUNCTIONS_ID_FN_ID_: FunctionsIdFnId,
         PathValues.FUNCTIONS_FN_ID_LOGS_: FunctionsFnIdLogs,
         PathValues.FUNCTIONS_FN_ID_LOGS_EXECUTION_EXEC_ID: FunctionsFnIdLogsExecutionExecId,
+        PathValues.BILL_: Bill,
     }
 )
 
@@ -34,5 +36,6 @@ path_to_api = PathToApi(
         PathValues.FUNCTIONS_ID_FN_ID_: FunctionsIdFnId,
         PathValues.FUNCTIONS_FN_ID_LOGS_: FunctionsFnIdLogs,
         PathValues.FUNCTIONS_FN_ID_LOGS_EXECUTION_EXEC_ID: FunctionsFnIdLogsExecutionExecId,
+        PathValues.BILL_: Bill,
     }
 )

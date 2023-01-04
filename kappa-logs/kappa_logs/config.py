@@ -15,6 +15,7 @@ class Kappa(BaseModel):
 class Server(BaseModel):
     host: str
     port: int
+    reload: bool
 
 
 class Config(BaseSettings):

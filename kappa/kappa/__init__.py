@@ -16,7 +16,7 @@ import kappa_logs_client.apis.tags.default_api
 import kappa_runner_client
 import kappa_runner_client.apis.tags.default_api
 from kappa.config import config
-from kappa_data import LoginUser, User
+from kappa_data import Bill, LoginUser, User
 from kappa_data.security import credentials_exception, oauth2_scheme
 from kappa_data_client.model.create_function import CreateFunction as DataCreateFunction
 from kappa_logs import Logs
@@ -274,3 +274,14 @@ def get_fn_logs(fn_name: str, kappa_data: KappaDataApi = Depends(get_auth_kappa_
     fn = kappa_data.get_function(path_params={"fn_name": fn_name}).body
     content = kappa_logs.get_fn_logs(path_params={"fn_id": fn["fn_id"]}, skip_deserialization=True).response.data
     return Logs.parse_raw(content)
+
+@app.get("/functions/exec/{exec_id}/logs/", response_model=Logs)
+def get_exec_logs(exec_id: str, kappa_logs: KappaLogsApi = Depends(get_kappa_logs)):
+    content = kappa_logs.get_exec_logs(path_params={"exec_id": exec_id}, skip_deserialization=True).response.data
+    return Logs.parse_raw(content)
+
+@app.get("/bill/", response_model=Bill)
+def get_bill(kappa_data: KappaDataApi = Depends(get_auth_kappa_data)):
+    return Bill.parse_raw(
+        kappa_data.bill(skip_deserialization=True).response.data
+    )

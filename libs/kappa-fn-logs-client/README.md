@@ -176,6 +176,7 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**create_log**](docs/apis/tags/DefaultApi.md#create_log) | **post** /logs/ | Create Log
+*DefaultApi* | [**get_exec_logs**](docs/apis/tags/DefaultApi.md#get_exec_logs) | **get** /logs/exec/{exec_id}/ | Get Exec Logs
 *DefaultApi* | [**get_logs**](docs/apis/tags/DefaultApi.md#get_logs) | **get** /logs/{fn}/ | Get Logs
 
 ## Documentation For Models

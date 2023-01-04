@@ -8,3 +8,4 @@ import enum
 class PathValues(str, enum.Enum):
     LOGS_ = "/logs/"
     LOGS_FN_ = "/logs/{fn}/"
+    LOGS_EXEC_EXEC_ID_ = "/logs/exec/{exec_id}/"

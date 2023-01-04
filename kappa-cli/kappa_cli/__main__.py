@@ -4,8 +4,10 @@ from pathlib import Path
 
 import halo
 import requests
-from rich import print
 import typer
+from rich import print
+from rich.console import Console
+from rich.table import Table
 from starlette import status
 
 import kappa_client.apis.tags.default_api
@@ -71,10 +73,10 @@ def signup():
 
 @cli.command()
 def login():
-    assert_kappa_up()
     username = typer.prompt("Enter username")
     password = getpass.getpass("Enter password: ")
     with halo.Halo(text="Logging in...", spinner="dots") as spin:
+        assert_kappa_up()
         try:
             response = kappa.login(LoginUser(username=username, password=password)).body
         except ApiException:
@@ -92,10 +94,10 @@ cli.add_typer(fn, name="fn")
 
 @fn.command()
 def create(name: str, code: Path = typer.Argument(..., exists=True, file_okay=True, dir_okay=False, readable=True)):
-    assert_logged_in()
     with open(code, 'r') as f:
         code = f.read()
     with halo.Halo(text=f"Creating '{name}'...", spinner="dots") as spin:
+        assert_logged_in()
         try:
             response = kappa.create_function(CreateFunction(name=name, code=code)).body
         except ApiException as e:
@@ -112,10 +114,11 @@ def create(name: str, code: Path = typer.Argument(..., exists=True, file_okay=Tr
             for repo in response['related']['repos']:
                 print(repo)
 
+
 @fn.command()
 def delete(name: str):
-    assert_logged_in()
     with halo.Halo(text=f"Deleting '{name}'...", spinner="dots") as spin:
+        assert_logged_in()
         try:
             kappa.delete_function(path_params={"fn_name": name})
         except ApiException as e:
@@ -132,7 +135,6 @@ def delete(name: str):
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
 )
 def execute(name: str, ctx: typer.Context):
-    assert_logged_in()
     params = {}
     key = None
     for arg in ctx.args:
@@ -143,6 +145,7 @@ def execute(name: str, ctx: typer.Context):
             params[key] = arg
             key = None
     with halo.Halo(f"Executing function {name}...", spinner="dots") as spin:
+        assert_logged_in()
         try:
             execution = kappa.execute_function(path_params={"fn_name": name}, query_params={"params": params}).body
         except ApiException as e:
@@ -165,10 +168,11 @@ def execute(name: str, ctx: typer.Context):
 logs = typer.Typer()
 cli.add_typer(logs, name="logs")
 
+
 @logs.command(name="fn")
 def fn_logs(name: str):
-    assert_logged_in()
     with halo.Halo(f"Fetching logs for '{name}'...", spinner="dots") as spin:
+        assert_logged_in()
         try:
             logs = kappa.get_fn_logs(path_params={"fn_name": name})
         except ApiException as e:
@@ -181,3 +185,39 @@ def fn_logs(name: str):
         spin.succeed()
         for log in logs.body["logs"]:
             print(f"{log['ts']} | {log['content']}")
+
+
+@logs.command(name="exec")
+def exec_logs(exec_id: str):
+    with halo.Halo(f"Fetching logs for '{exec_id}'...", spinner="dots") as spin:
+        assert_logged_in()
+        try:
+            logs = kappa.get_exec_logs(path_params={"exec_id": exec_id})
+        except ApiException as e:
+            match e.status:
+                case status.HTTP_404_NOT_FOUND:
+                    spin.fail()
+                    error(f"Execution '{exec_id}' not found.")
+                case _:
+                    raise e
+        spin.succeed()
+        for log in logs.body["logs"]:
+            print(f"{log['ts']} | {log['content']}")
+
+
+@cli.command()
+def bill():
+    with halo.Halo(f"Fetching bill...", spinner="dots") as spin:
+        assert_logged_in()
+        try:
+            bill = kappa.get_bill().body
+        except ApiException as e:
+            raise e
+        spin.succeed("  ")
+        table = Table(title="Bill")
+        table.add_column("Function Name")
+        table.add_column("# exec's")
+        for fn in bill["fn"]:
+            table.add_row(str(fn), str(bill["fn"][fn]))
+        table.add_row("[cyan]total[/cyan]", f"[cyan]{bill['total']}[/cyan]")
+        Console().print(table)

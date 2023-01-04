@@ -14,3 +14,4 @@ class PathValues(str, enum.Enum):
     FUNCTIONS_ID_FN_ID_ = "/functions/id/{fn_id}/"
     FUNCTIONS_FN_ID_LOGS_ = "/functions/{fn_id}/logs/"
     FUNCTIONS_FN_ID_LOGS_EXECUTION_EXEC_ID = "/functions/{fn_id}/logs/execution/{exec_id}"
+    BILL_ = "/bill/"
