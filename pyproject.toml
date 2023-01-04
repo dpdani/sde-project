@@ -48,6 +48,7 @@ frozendict = "2.3.4"
 python-dateutil = "2.8.2"
 halo = "^0.0.31"
 rich = "^12.6.0"
+tomlkit = "^0.11.6"
 
 
 [build-system]

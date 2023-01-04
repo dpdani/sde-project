@@ -1,11 +1,8 @@
 [server]
 host = "0.0.0.0"
 port = 8050
-reload = true
+reload = false
 
 [kappa]
-data = "http://localhost:8020"
-fn_logs = "http://localhost:8040"
-
-#data = "http://kappa-data:8010"
-#fn_logs = "http://kappa-fn-logs:8030"
+data = "http://kappa-data:8020"
+fn_logs = "http://kappa-fn-logs:8040"

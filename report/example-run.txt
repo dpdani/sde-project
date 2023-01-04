@@ -1,0 +1,47 @@
+/app # kappa-cli signup
+Choose a username: dpdani
+Choose a password:
+Enter your password again:
+User dpdani created
+/app # kappa-cli login
+Enter username: dpdani
+Enter password:
+✔ Logged in
+/app # kappa-cli fn create hello ./example2.py
+✔ Function hello created
+You may also be intereseted in these open source projects:
+https://github.com/phonegap/phonegap-start
+https://github.com/greyli/helloflask
+https://github.com/521xueweihan/HelloGitHub
+/app # kappa-cli fn execute hello --name dpdani
+✔ Executing function hello...
+Function 'hello' executed with output:
+{'message': 'Hello, dpdani'}
+See the logs of this execution by running: kappa-cli logs exec 54bd8124-f9f8-45bc-a73b-ca42429b24a5
+/app # kappa-cli logs exec 54bd8124-f9f8-45bc-a73b-ca42429b24a5
+✔ Fetching logs for '54bd8124-f9f8-45bc-a73b-ca42429b24a5'...
+2023-01-04T18:49:23.255000+00:00 | {"exec_id": "54bd8124-f9f8-45bc-a73b-ca42429b24a5", "stdout": "New message:\n", "stderr": "Hello, dpdani\n"}
+/app # kappa-cli fn execute hello --name SDE
+✔ Executing function hello...
+Function 'hello' executed with output:
+{'message': 'Hello, SDE'}
+See the logs of this execution by running: kappa-cli logs exec f177540c-e903-4113-99ae-1826eeef643a
+/app # kappa-cli logs fn hello
+✔ Fetching logs for 'hello'...
+2023-01-04T17:49:09.115213+00:00 | {"status": "created"}
+2023-01-04T17:49:23.192337+00:00 | {"status": "started", "exec_id": "54bd8124-f9f8-45bc-a73b-ca42429b24a5"}
+2023-01-04T17:49:45.692597+00:00 | {"status": "started", "exec_id": "f177540c-e903-4113-99ae-1826eeef643a"}
+2023-01-04T18:49:23.255000+00:00 | {"exec_id": "54bd8124-f9f8-45bc-a73b-ca42429b24a5", "stdout": "New message:\n", "stderr": "Hello, dpdani\n"}
+2023-01-04T18:49:45.698000+00:00 | {"exec_id": "f177540c-e903-4113-99ae-1826eeef643a", "stdout": "New message:\n", "stderr": "Hello, SDE\n"}
+/app # kappa-cli bill
+✔
+            Bill
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Function Name ┃ # exec's ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ hello         │ 2        │
+│ total         │ 2        │
+└───────────────┴──────────┘
+/app # kappa-cli fn delete hello
+✔ Function 'hello' deleted
+/app #

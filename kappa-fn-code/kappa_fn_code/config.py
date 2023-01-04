@@ -10,6 +10,7 @@ def read_conf_file(_: BaseSettings):
 class Server(BaseModel):
     host: str
     port: int
+    reload: bool
 
 
 class Config(BaseSettings):

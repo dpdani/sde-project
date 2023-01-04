@@ -39,6 +39,12 @@ services:
     ports:
       - "8060:8060"
 
+  kappa-cli:
+    build: .
+    command: "sh"
+    links:
+      - kappa
+
   postgres:
     image: postgres:14-alpine3.17
     volumes:

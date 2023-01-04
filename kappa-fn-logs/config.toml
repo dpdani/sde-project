@@ -1,9 +1,9 @@
 [db]
-url = "mongodb://kappa:password@localhost:27017/"
+url = "mongodb://kappa:password@mongo:27017/"
 database = "kappa"
 collection = "logs"
 
 [server]
 host = "0.0.0.0"
 port = 8040
-reload = true
+reload = false

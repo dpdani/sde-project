@@ -3,4 +3,4 @@ code_folder = "code"
 [server]
 host = "0.0.0.0"
 port = 8030
-reload = true
+reload = false
