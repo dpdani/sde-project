@@ -1,0 +1,62 @@
+% Data flow diagram
+% Author: David Fokkema
+\documentclass{article}
+\usepackage{tikz}
+\usetikzlibrary{
+    positioning,
+    fit,
+    arrows,
+    petri,
+    shapes.geometric,
+    shapes.symbols
+}
+
+\usepackage[active,tightpage]{preview}
+\usepackage{fontawesome}
+\setlength\PreviewBorder{0pt}%
+
+
+\begin{document}
+    \begin{center}
+        \begin{preview}
+            \begin{tikzpicture}[
+                node distance=5mm,
+                shorten >=1pt,
+                <->
+                ]
+                
+                \node[] (user) {\faUser};
+                \node[draw, right=of user] (cli) {Kappa CLI};
+                \node[draw, below=of cli] (kappa) {Kappa};
+                \node[draw, below=of kappa] (kappa-data) {Kappa Data};
+                \node[draw, left=of kappa-data] (kappa-runner) {Kappa Runner};
+                \node[draw, below=of kappa-runner] (kappa-fn-code) {Kappa Functions Code};
+                \node[draw, right=of kappa-data] (kappa-logs) {Kappa Logs};
+                \node[draw, below=of kappa-logs] (kappa-fn-logs) {Kappa Functions Logs};
+                \node[draw] (gh) at (kappa-logs |- kappa) {GitHub};
+                
+                \node[draw, cylinder, shape border rotate=90, aspect=0.1, below=of kappa-fn-logs] (mongo) {MongoDB};
+                \node[draw, cylinder, shape border rotate=90, aspect=0.1] (db) at (kappa-data |- mongo) {PostgreSQL};
+                \node[draw, cylinder, shape border rotate=90, aspect=0.1] (code) at (kappa-fn-code |- mongo) {Docker Volume};
+                
+                \path (user) edge (cli);
+                \path (cli) edge (kappa);
+                \path (kappa) edge (kappa-data);
+                \path (kappa) edge (gh);
+                %\path (kappa) edge (kappa-fn-code);
+                \path (kappa.south east) edge (kappa-logs.north west);
+                \path (kappa.south west) edge (kappa-runner.north east);
+                \path (kappa-logs) edge (kappa-data);
+                \path (kappa-logs) edge (kappa-fn-logs);
+                \path (kappa-runner) edge (kappa-data);
+                \path (kappa-runner) edge (kappa-fn-code);
+                \path (kappa-runner.south east) edge (kappa-fn-logs.west);
+                
+                \path (kappa-data) edge (db);
+                \path (kappa-fn-code) edge (code);
+                \path (kappa-fn-logs) edge (mongo);
+                
+            \end{tikzpicture}
+        \end{preview}
+    \end{center}
+\end{document}
