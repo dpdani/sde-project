@@ -15,6 +15,13 @@ docker run --network=kappa-sde_default -it kappa-sde-kappa-cli sh
 
 A shell should be presented, with the `kappa-cli` command available. This
 command provides the CLI client of the kappa service.
+To learn about the available commands and options, run `kappa-cli --help`.
+
+In order to stop the services, close the shell and run:
+
+```shell
+docker compose down
+```
 
 ## Original Proposal
 
